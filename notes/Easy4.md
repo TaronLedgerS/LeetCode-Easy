@@ -126,6 +126,63 @@ class MyStack {
 
 ## [226. Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/)
 
-### 题解(树)-2019年11月4日
+### 题解(树)-2019年11月5日
+
+-   递归，树左右翻转
+
+    ```java
+    class InvertBinaryTree {
+         TreeNode invertTree(TreeNode root) {
+             if(null == root){
+                 return null;
+             }
+            TreeNode tleft = invertTree(root.left);
+            TreeNode tright = invertTree(root.right);
+            root.left = tright;
+            root.right = tleft;
+            return root;
+        }
+    }
+    ```
+
+## [231. Power of Two](https://leetcode.com/problems/power-of-two/)
+
+### 题解（位运算）-2019年11月6日
+
+-   判断给出的数是否为2次幂→是否转换为二进制后只有最高位是1其余位是0
+-   法一：逐位除2取余判断
+-   法二：位运算
+-   法四：>>=与>>的区别在于前者会更改原值，[位运算](Java中的移位运算符)
+
+```java
+class PowerofTwo{
+    boolean isPowerOfTwo1(int n) {
+        if (n==0) return false;
+        while(n%2 == 0){
+            n = n / 2;
+        }
+        return n == 1;
+    }
+    boolean isPowerOfTwo2(int n) {
+        return n>0 && Integer.bitCount(n) == 1;
+    }
+    boolean isPowerOfTwo3(int n) {
+        if (n==0) return false;
+        int ones = 0;
+        for (int i = 1; i <= 64; ++i) {
+            ones += n & 1;//统计1的个数
+            n = n >> 1;
+        }
+        return ones == 1;//只有一个1位正确结果
+    }
+    boolean isPowerOfTwo4(int n) {
+        int shifts=(n==1)?0:1;
+        for( int temp=n; (temp>>=1)>1; shifts++ );
+        return n==(1<<shifts);
+    }
+}
+```
+
+## [232. Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/)
 
 ## [LOCKED UP]170.Two Sum III
