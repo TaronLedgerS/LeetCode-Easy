@@ -15,7 +15,7 @@ public class P206_ReverseLinkedListTest {
     }
 }
 class ListNode {
-    private int val;
+    int val;
     ListNode next;
     ListNode(int x) { val = x; }
 }

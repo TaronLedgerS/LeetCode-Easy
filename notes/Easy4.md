@@ -185,4 +185,118 @@ class PowerofTwo{
 
 ## [232. Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/)
 
+### [题解（栈）-2019年11月7日](https://leetcode.com/problems/implement-queue-using-stacks/solution/)
+
+-   法一：(Two Stacks)栈顶当队首 Push - O(n) per operation, Pop - O(1) per operation.
+    ```java
+    class MyQueue {
+        private Stack<Integer>  s1 = new Stack<>();
+        private Stack<Integer>  s2 = new Stack<>();
+        /** Initialize your data structure here. */
+        public MyQueue() {
+        }
+        /** Push element x to the back of queue. */
+        public void push(int x) {
+            while (!s1.empty())
+                s2.push(s1.pop());
+            s1.push(x);
+            while (!s2.empty())
+                s1.push(s2.pop());
+        }
+        /** Removes the element from in front of queue and returns that element. */
+        public int pop() {
+            return s1.pop();
+        }
+        /** Get the front element. */
+        public int peek() {
+            return s1.peek();
+        }
+        /** Returns whether the queue is empty. */
+        public boolean empty() {
+            return s1.empty();
+        }
+    }
+    ```
+-   法二：(Two Stacks) 栈顶当队尾Push - O(1) per operation, Pop - O(1) per operation.
+    ```java
+    class MyQueue2 {
+        private Stack<Integer>  s1 = new Stack<>();//栈顶当队尾
+        private Stack<Integer>  s2 = new Stack<>();
+        private int front;
+        /** Initialize your data structure here. */
+        public MyQueue2() {
+        }
+        /** Push element x to the back of queue. */
+        public void push(int x) {
+            if (s1.empty()) {
+                front=x;
+            }
+            s1.push(x);
+        }
+        /** Removes the element from in front of queue and returns that element. */
+        public int pop() {
+            while (!s1.empty()) {
+                s2.push(s1.pop());
+            }
+            int a = s2.pop();
+            if (!s2.empty()) {
+                front = s2.peek();
+            } else {
+                front = -1;
+            }
+            while (!s2.empty()) {
+                s1.push(s2.pop());
+            }
+            return a;
+        }
+        /** Get the front element. */
+        public int peek() {
+            return front;
+        }
+        /** Returns whether the queue is empty. */
+        public boolean empty() {
+            return s1.empty();
+        }
+    }
+    ```
+
+## [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/)
+
+### 题解（链表操作）- 2019年11月8日
+
+-   判断一个单链表是否回文：翻转链表的后半段，逐个比较
+    ```java
+    public boolean isPalindrome(ListNode head) {
+    	ListNode fast = head;
+    	ListNode slow = head;
+    	while (fast != null && fast.next != null) {
+    		fast = fast.next.next;
+    		slow = slow.next;
+    	}
+    	if (fast != null) {//保证左边比右边多
+    		slow = slow.next;//右半部的开头
+    	}
+    	slow = reverse(slow);
+    	fast = head;
+    	while (slow != null) {
+    		if (fast.val != slow.val) {
+    			return false;
+    		}
+    		fast = fast.next;
+    		slow = slow.next;
+    	}
+    	return true;
+    }
+    public ListNode reverse(ListNode head) {
+    	ListNode prev = null;
+    	while (head != null) {
+    		ListNode next = head.next;
+    		head.next = prev;
+    		prev = head;
+    		head = next;
+    	}
+    	return prev;
+    }
+    ```
+
 ## [LOCKED UP]170.Two Sum III
