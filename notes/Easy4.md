@@ -299,4 +299,64 @@ class PowerofTwo{
     }
     ```
 
-## [LOCKED UP]170.Two Sum III
+## [235. Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+### 题解（二叉搜索树）- 2019年11月9日
+
+-   给定两个节点，找出最近公共祖先LCA
+
+```java
+class  LCAofBST{
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		if (root.val > p.val && root.val > q.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        if (root.val < p.val && root.val < q.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        return root;
+    }
+}
+```
+
+## [237. Delete Node in a Linked List](https://leetcode.com/problems/delete-node-in-a-linked-list/)
+
+### 题解（链表）- 2019年11月10日
+
+-   删除给定链表中的节点
+
+```java
+class DeleteNodeinaLinkedList {
+    public void deleteNode(ListNode node) {
+        //用下一节点替换掉当前节点，然后删除下一个节点
+        node.val = node.next.val;//用下一个节点覆盖原值
+        node.next = node.next.next;//指向下一个节点的下一个节点
+    }
+}
+```
+
+## [242. Valid Anagram](https://leetcode.com/problems/valid-anagram/)
+
+### 题解- 2019年11月11日
+
+## [LOCKED UP]243.Shortest Word Distance
+
+## [LOCKED UP]246.Strobogrammatic Number
+
+## [LOCKED UP]252.Meeting Rooms
+
+## [LOCKED UP]256.Paint House
+
+## [257. Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/)
+
+### 题解- 2019年11月12日
+
+## [258. Add Digits](https://leetcode.com/problems/add-digits/)
+
+### 题解- 2019年11月13日
+
+## [263. Ugly Number](https://leetcode.com/problems/ugly-number/)
+
+### 题解- 2019年11月14日
+
+## [LOCKED UP]266.Palindrome Permutation
