@@ -337,7 +337,42 @@ class DeleteNodeinaLinkedList {
 
 ## [242. Valid Anagram](https://leetcode.com/problems/valid-anagram/)
 
-### 题解- 2019年11月11日
+### 题解-2019年11月11日
+
+-   所谓 anagram, 就是两个词所用的字母及其个数都是一样的，但是，字母的位置不一样，此外题中只包含小写字母a-z
+-   法一：打表统计
+-   法二：排序比较
+    ```java
+    class ValidAnagram {
+        public boolean isAnagram1(String s, String t) {
+            if (s.length() != t.length()) {
+                return false;
+            }
+            int[] table = new int[26];
+            for (int i = 0; i < s.length(); i++) {
+                table[s.charAt(i)-'a']++;
+            }
+            for (int i = 0; i < t.length(); i++) {
+                int j = t.charAt(i)-'a';
+                table[j]--;
+                if (table[j] < 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public boolean isAnagram2(String s, String t) {
+            if (s.length() != t.length()) {
+                return false;
+            }
+            char[] str1 = s.toCharArray();
+            char[] str2 = t.toCharArray();
+            Arrays.sort(str1);
+            Arrays.sort(str2);
+            return Arrays.equals(str1, str2);
+        }
+    }
+    ```
 
 ## [LOCKED UP]243.Shortest Word Distance
 
