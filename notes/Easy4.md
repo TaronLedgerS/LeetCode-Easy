@@ -384,14 +384,80 @@ class DeleteNodeinaLinkedList {
 
 ## [257. Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/)
 
-### 题解- 2019年11月12日
+### 题解(二叉树)- 2019年11月12日
+
+-   递归遍历二叉树并输出所有路径
+
+```Java
+class BinaryTreePaths {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> ans = new ArrayList<>();
+        if(root!=null)   searchBT(root, "", ans);
+        return ans;
+    }
+    private void searchBT(TreeNode node, String path, List<String> ans) {
+        if (node.left == null && node.right == null) {
+            path += node.val;
+            ans.add(path);
+        }
+        if (node.left != null) {
+            searchBT(node.left,path+node.val + "->",ans);
+        }
+        if (node.right != null) {
+            searchBT(node.right, path+node.val + "->", ans);
+        }
+    }
+}
+```
 
 ## [258. Add Digits](https://leetcode.com/problems/add-digits/)
 
-### 题解- 2019年11月13日
+### 题解（数字操作）- 2019年11月13日
+
+```java
+class AddDigits{
+    public int addDigits(int num) {
+        int ans = 0;
+        while (true) {
+            while (num > 0) {
+                ans += num % 10;
+                num /= 10;
+            }
+            if (ans >= 10) {
+                num = ans;
+                ans = 0;
+            } else
+                return ans;
+        }
+    }
+}
+```
 
 ## [263. Ugly Number](https://leetcode.com/problems/ugly-number/)
 
 ### 题解- 2019年11月14日
+
+-   判断是否因子是否只包含质数2、3、5
+
+```python
+#python
+for p in 2, 3, 5:
+    while num % p == 0 < num:
+        num /= p
+return num == 1
+```
+
+```Java
+class UglyNumber {
+    public boolean isUgly(int num) {
+        if (num == 1) return true;
+        if (num==0) return false;
+        while (num % 2 == 0) num /= 2;
+        while (num % 3==0) num /= 3;
+        while (num %5==0) num /= 5;
+        return num == 1;
+    }
+}
+```
 
 ## [LOCKED UP]266.Palindrome Permutation
