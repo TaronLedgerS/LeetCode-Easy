@@ -19,6 +19,7 @@ class IsomorphicString{
         int[] lastS2 = new int[256];
         //初始出现均属于同构，两个数组初始化为0
         for (int i = 0; i < s1.length(); i++) {
+			
             //判断当前位置上这一对字母映射上一次出现的位置是否相同
             if (lastS1[s1.charAt(i)] != lastS2[s2.charAt(i)])
                 return false;
