@@ -152,25 +152,176 @@ public class P389_FindtheDifference {
 
 ## [392. Is Subsequence](https://leetcode.com/problems/is-subsequence/)
 
-### 题解-2019年12月4日
+### 题解（子序列）-2019年12月4日
+
+-   s = "abc", t = "ahbgdc" 判断s是否为t的子序列
+-   子序列的两个特征：元素匹配+位置有序
+-   法一：循环枚举比对，时间复杂度O(T)
+-   法二：二分枚举，先对T的各元素出现的位置进行哈希-时间复杂度O(T)，遍历S用二分查找确保每个元素的位置顺序，时间复杂度O(SlogT)→用于一个T串但有很多个S串的情况
+
+```java
+public class P392_IsSubsequence {
+    public boolean isSubsequence(String s, String t) {
+        if (s.length() == 0) {
+            return true;
+        }
+        int indexS = 0;
+        for (int i = 0; i < t.length(); i++) {
+            if (s.charAt(indexS) == t.charAt(i)) {
+                indexS++;
+                if (indexS == s.length()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        P392_IsSubsequence test = new P392_IsSubsequence();
+        System.out.println(test.isSubsequence("axc","ahbgdc"));
+    }
+}
+```
 
 ## [401. Binary Watch](https://leetcode.com/problems/binary-watch/)
 
-### 题解-2019年12月5日
+### 题解（时间+进制+格式化）-2019年12月5日
+
+-   从结果出发，枚举结果
+
+```java
+public class P401_BinaryWatch {
+    public List<String> readBinaryWatch(int num) {
+        List<String> times = new ArrayList<>();
+        for (int h = 0; h < 12; h++) {
+            for (int m = 0; m < 60; m++) {
+                if (Integer.bitCount(h * 64 + m) == num) {
+                    times.add(String.format("%d:%02d",h,m));
+                }
+            }
+        }
+        return times;
+    }
+    public static void main(String[] args) {
+        P401_BinaryWatch test = new P401_BinaryWatch();
+        List<String> times = test.readBinaryWatch(1);
+        for (String temp : times) {
+            System.out.println(temp);
+        }
+    }
+}
+```
 
 ## [404. Sum of Left Leaves](https://leetcode.com/problems/sum-of-left-leaves/)
 
-### 题解-2019年12月6日
+### ⭐题解（二叉树）-2019年12月6日
+
+```java
+public class P404_SumofLeftLeaves {
+    //字符串构造二叉树
+    public static TreeNode stringToTreeNode(String input) {
+        input = input.trim();
+        if (input.length() == 0) {
+            return null;
+        }
+        String[] parts = input.split(",");
+        String item = parts[0];
+        TreeNode root = new TreeNode(Integer.parseInt(item));
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(root);
+        int index = 1;
+        while(!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+
+            if (index == parts.length) {
+                break;
+            }
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int leftNumber = Integer.parseInt(item);
+                node.left = new TreeNode(leftNumber);
+                nodeQueue.add(node.left);
+            }
+            if (index == parts.length) {
+                break;
+            }
+        	item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int rightNumber = Integer.parseInt(item);
+                node.right = new TreeNode(rightNumber);
+                nodeQueue.add(node.right);
+            }
+        }
+        return root;
+    }
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) {
+            return  0;
+        }
+        int sum = 0;
+        if (root.left != null && root.left.left == null && root.left.right == null) {//为左叶子节点
+            sum += root.left.val;
+        } else {//为空或者非叶子节点
+            sum += sumOfLeftLeaves(root.left);
+        }
+        sum += sumOfLeftLeaves(root.right);
+        return sum;
+    }
+    public static void main(String[] args) {
+        P404_SumofLeftLeaves test = new P404_SumofLeftLeaves();
+        System.out.println(test.sumOfLeftLeaves(stringToTreeNode("3,9,20,null,null,15,7")));
+    }
+}
+```
 
 ## [405. Convert a Number to Hexadecimal](https://leetcode.com/problems/convert-a-number-to-hexadecimal/)
 
-### 题解-2019年12月7日
+### 题解（进制编码）-2019年12月7日
+
+```java
+public class P405_ConvertaNumbertoHexadecimal {
+    public String toHex(int num) {
+        return Integer.toHexString(num);
+    }
+
+    public static void main(String[] args) {
+        P405_ConvertaNumbertoHexadecimal test = new P405_ConvertaNumbertoHexadecimal();
+        System.out.println(test.toHex(-1));
+    }
+}
+```
 
 ## [LOCKED UP]408. Valid Word Abbreviation
 
 ## [409. Longest Palindrome](https://leetcode.com/problems/longest-palindrome/)
 
-### 题解-2019年12月8日
+### 题解（HashSet）-2019年12月8日
+
+```java
+public class P409LongestPalindrome {
+    public int longestPalindrome(String s) {
+        int count = 0;
+        HashSet<Character> tmpSet = new HashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (tmpSet.contains(s.charAt(i))) {
+                tmpSet.remove(s.charAt(i));
+                count++;
+            }else{
+                tmpSet.add(s.charAt(i));
+            }
+        }
+        if (!tmpSet.isEmpty()) return count * 2 + 1;
+        return count*2;
+    }
+    public static void main(String[] args) {
+        P409LongestPalindrome test = new P409LongestPalindrome();
+        System.out.println(test.longestPalindrome("abbcccdd"));
+    }
+}
+```
 
 ## [412. Fizz Buzz](https://leetcode.com/problems/fizz-buzz/)
 
