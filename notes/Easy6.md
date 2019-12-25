@@ -325,33 +325,282 @@ public class P409LongestPalindrome {
 
 ## [412. Fizz Buzz](https://leetcode.com/problems/fizz-buzz/)
 
-### 题解-2019年12月9日
+### 题解（List）-2019年12月9日
+
+```java
+public class P412_FizzBuzz {
+    public List<String> fizzBuzz(int n) {
+        List<String> FizzBuzzList = new ArrayList<>();
+        for (int i = 1;i<=n;i++) {
+            if (((i % 3) == 0) && ((i % 5) == 0)) {
+                FizzBuzzList.add("FizzBuzz");
+            } else if (i%3==0) {
+                FizzBuzzList.add("Fizz");
+            } else if (i % 5 == 0) {
+                FizzBuzzList.add("Buzz");
+            } else {
+                FizzBuzzList.add(String.valueOf(i));
+            }
+        }
+        return FizzBuzzList;
+    }
+    public static void main(String[] args) {
+        P412_FizzBuzz test = new P412_FizzBuzz();
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        System.out.println(test.fizzBuzz(n));
+    }
+}
+```
 
 ## [414. Third Maximum Number](https://leetcode.com/problems/third-maximum-number/)
 
-### 题解-2019年12月10日
+### 题解-（优先队列）-2019年12月10日
+
+```java
+public class P414_ThirdMaximumNumber {
+    public int thirdMax(int[] nums) {
+        int a = -1;
+        int b = -1;
+        int c = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (a==nums[i]||b==nums[i]||c==nums[i]) continue;
+            if (a == -1 || nums[i] > a) {
+                c = b;
+                b = a;
+                a = nums[i];
+            } else if (b == -1 || nums[i] > b) {
+                c = b;
+                b = nums[i];
+            } else if(c==-1||nums[i]>c){
+                c = nums[i];
+            }
+        }
+    	if (c != -1) {
+            return c;
+        } else  return a;
+    }
+    public static void main(String[] args) {
+        P414_ThirdMaximumNumber test = new P414_ThirdMaximumNumber();
+        int[] n = {2, 1, 2,3};
+        System.out.println(test.thirdMax(n));
+    }
+}
+```
 
 ## [415. Add Strings](https://leetcode.com/problems/add-strings/)
 
-### 题解-2019年12月11日
+### 题解（大数相加）-2019年12月11日
+
+```java
+public class P415_AddStrings {
+    public String addStrings1(String num1, String num2) {
+        BigInteger a = new BigInteger(num1);
+        BigInteger b = new BigInteger(num2);
+        BigInteger result = a.add(b);
+        return result.toString();
+    }
+    public String addStrings(String num1, String num2) {
+        int carry = 0;
+        int i = num1.length() - 1, j = num2.length() - 1;
+        StringBuilder sb = new StringBuilder();
+        while (i >= 0 || j >= 0) {
+            int n1 = 0, n2 = 0;
+            if (i >= 0) {
+                n1 = num1.charAt(i) - '0';
+            }
+            if (j >= 0) {
+                n2 = num2.charAt(j) - '0';
+            }
+            int sum = n1 + n2 + carry;
+            carry = sum / 10;
+            sb.append(sum % 10);
+            i--;
+            j--;
+        }
+        if (carry != 0) {
+            sb.append(carry);
+        }
+        return sb.reverse().toString();
+    }
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        P415_AddStrings test = new P415_AddStrings();
+        String num1 = s.nextLine();
+        String num2 = s.nextLine();
+        System.out.printf("%s,%s\n",num1,num2);
+        System.out.println(test.addStrings1(num1,num2));
+        System.out.println(test.addStrings(num1,num2));
+    }
+}
+```
 
 ## [LOCKED UP]422. Valid Word Square
 
 ## [434. Number of Segments in a String](https://leetcode.com/problems/number-of-segments-in-a-string/)
 
-### 题解-2019年12月12日
+### 题解（字符串）-2019年12月12日
 
-## [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/)
+-   [Java--"\\s+"匹配任意空白字符](https://blog.csdn.net/high2011/article/details/53467220)
 
-### 题解-2019年12月13日
+```java
+public class P434_NumberofSegmentsinaString {
+    public int countSegments(String s) {
+        String trimmed = s.trim();//去除头尾空格
+        if (trimmed.equals("")) {
+            return 0;
+        }
+        return trimmed.split("\\s+").length;
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        P434_NumberofSegmentsinaString test = new P434_NumberofSegmentsinaString();
+        while ((line = in.readLine()) != null) {
+            System.out.println(test.countSegments(line));
+        }
+    }
+}
+```
+
+## ⭐[437. Path Sum III](https://leetcode.com/problems/path-sum-iii/)
+
+### 题解（树，递归，前缀）-2019年12月13日
+
+```java
+public class P437_PathSumIII {
+    public static TreeNode stringToTreeNode(String input) {
+        input = input.trim();
+        if (input.length() == 0) {
+            return null;
+        }
+
+        String[] parts = input.split(",");
+        String item = parts[0];
+        TreeNode root = new TreeNode(Integer.parseInt(item));
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(root);
+
+        int index = 1;
+        while(!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+
+            if (index == parts.length) {
+                break;
+            }
+
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int leftNumber = Integer.parseInt(item);
+                node.left = new TreeNode(leftNumber);
+                nodeQueue.add(node.left);
+            }
+
+            if (index == parts.length) {
+                break;
+            }
+
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int rightNumber = Integer.parseInt(item);
+                node.right = new TreeNode(rightNumber);
+                nodeQueue.add(node.right);
+            }
+        }
+        return root;
+    }
+    public int pathSum(TreeNode root, int sum) {
+        HashMap<Integer, Integer> preSum = new HashMap<>();
+        preSum.put(0, 1);
+        helper(root, 0, sum, preSum);
+        return count;
+    }
+    int count = 0;
+    public void helper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
+        if (root == null) {
+            return;
+        }
+        currSum += root.val;
+        if (preSum.containsKey(currSum - target)) {
+            count += preSum.get(currSum - target);
+        }
+
+        if (!preSum.containsKey(currSum)) {
+            preSum.put(currSum, 1);
+        } else {
+            preSum.put(currSum, preSum.get(currSum) + 1);
+        }
+
+        helper(root.left, currSum, target, preSum);
+        helper(root.right, currSum, target, preSum);
+        preSum.put(currSum, preSum.get(currSum) - 1);
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        //10,5,-3,3,2,null,11,3,-2,null,1
+        String line;
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
+            TreeNode root = stringToTreeNode(line);
+            line = in.readLine();//读入数字
+            int sum = Integer.parseInt(line);
+            System.out.println(new P437_PathSumIII().pathSum(root,sum));
+        }
+    }
+}
+```
 
 ## [441. Arranging Coins](https://leetcode.com/problems/arranging-coins/)
 
 ### 题解-2019年12月14日
 
+```java
+public class P441_ArrangingCoins {
+    public int arrangeCoins(int n) {
+        int i = 0;
+        while (n > 0) {
+            i+=1;
+            n-=i;
+        }
+        return n==0?i:i-1;
+    }
+    public static void main(String[] args) {
+        System.out.println(new P441_ArrangingCoins().arrangeCoins(5));
+    }
+}
+```
+
 ## [443. String Compression](https://leetcode.com/problems/string-compression/)
 
-### 题解-2019年12月15日
+### 题解（字符）-2019年12月15日
+
+```java
+public class P443_StringCompression {
+    public int compress(char[] chars) {
+        int indexAns = 0,index = 0;
+        while (index < chars.length) {
+            char currentChar = chars[index];
+            int count = 0;
+            while (index < chars.length && chars[index] == currentChar) {
+                index++;
+                count++;
+            }
+            chars[indexAns++] = currentChar;
+            if(count!=1)
+                for (char c : Integer.toString(count).toCharArray()) {
+                    chars[indexAns++] = c;
+                }
+        }
+        return  indexAns;
+    }
+    public static void main(String[] args) {
+        System.out.println(new P443_StringCompression().compress("abbbbbb".toCharArray()));
+    }
+}
+```
 
 ## [447. Number of Boomerangs](https://leetcode.com/problems/number-of-boomerangs/)
 
