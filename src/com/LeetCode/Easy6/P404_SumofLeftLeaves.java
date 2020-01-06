@@ -64,7 +64,7 @@ public class P404_SumofLeftLeaves {
 
     public static void main(String[] args) {
         P404_SumofLeftLeaves test = new P404_SumofLeftLeaves();
-
-        System.out.println(test.sumOfLeftLeaves(stringToTreeNode("3,9,20,null,null,15,7")));
+//"3,9,20,null,null,15,7"
+        System.out.println(test.sumOfLeftLeaves(stringToTreeNode("1,null,2,2")));
     }
 }
