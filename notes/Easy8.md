@@ -45,23 +45,135 @@ public class P521_LongestUncommonSubsequenceI {
 
 ## [530. Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst/)
 
-### 题解（二叉搜索树）-2020年1月6日
+### 题解（二叉搜索树遍历）-2020年1月6日
+
+-   找二叉排序树中的元素最小差值：即中序遍历后相邻元素的最小差值
+
+```java
+public class P530_MinimumAbsoluteDifferenceinBST {
+    int pre=-1;
+    public int getMinimumDifference(TreeNode root) {
+        if (root == null) return Integer.MAX_VALUE;
+        int leftmin = getMinimumDifference(root.left);
+        int min = leftmin;
+        if(pre!=-1) {
+            min=Math.min(leftmin, root.val - pre);
+        }
+        pre = root.val;
+        int rightmin = getMinimumDifference(root.right);
+        min = Math.min(min, rightmin);
+        return min;
+    }
+    public static void main(String[] args) {
+        System.out.println(new P530_MinimumAbsoluteDifferenceinBST().getMinimumDifference(
+                StringToTreeNode.stringToTreeNode("1,null,5,3")
+        ));
+    }
+}
+```
 
 ## [532. K-diff Pairs in an Array](https://leetcode.com/problems/k-diff-pairs-in-an-array/)
 
-### 题解-2020年1月7日
+### ⭐题解（哈希建表）-2020年1月7日
+
+-   法一、二分查找：去重排序，逐个枚举，在剩余中二分查找是否存在差值k的结果`math O(NlogN)`
+-   法二、建立哈希表：逐个枚举（`math O(N)`）、查询+k的值（`math O(1)`）
+
+```java
+public class P532_KdiffPairsinanArray {
+    public int findPairs(int[] nums, int k) {
+        //临界判断
+        if (nums ==null||nums.length==0||k<0) return 0;
+        int count = 0;
+        //建立哈希表
+        Map<Integer, Integer> countMap = new HashMap<>();//<元素，出现次数>
+        for (int i : nums) {
+            countMap.put(i, countMap.getOrDefault(i, 0) + 1);
+        }
+        //统计
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            if (k == 0) {//距离为0，即重复元素
+                if (entry.getValue() >= 2) {
+                    count++;
+                }
+            } else {
+                if (countMap.containsKey(entry.getKey() + k)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public static void main(String[] args) {
+        System.out.println(new P532_KdiffPairsinanArray().findPairs(
+                new int[]{1,2,3,4,5},1
+        ));
+    }
+}
+```
 
 ## [538. Convert BST to Greater Tree](https://leetcode.com/problems/convert-bst-to-greater-tree/)
 
-### 题解-2020年1月8日
+### 题解（二叉排序树-后序遍历）-2020年1月8日
+
+```java
+public class P538_ConvertBSTtoGreaterTree {
+    int sum =0;
+    public TreeNode convertBST(TreeNode root) {
+        convert(root);
+        return root;
+    }
+    public void convert(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        convert(root.right);
+        sum += root.val;
+        root.val = sum;
+        convert(root.left);
+    }
+    public static void main(String[] args) {
+        System.out.println(new P538_ConvertBSTtoGreaterTree().convertBST(
+                StringToTreeNode.stringToTreeNode("5,2,13")
+        ));
+    }
+}
+```
 
 ## [541. Reverse String II](https://leetcode.com/problems/reverse-string-ii/)
 
-### 题解-2020年1月9日
+### 题解（字符串处理）-2020年1月9日
+
+```java
+public class P541_ReverseStringII {
+    public String reverseStr(String s, int k) {
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i += 2 * k) {
+            int j = i;
+            int l = Math.min(chars.length, j + k)-1;
+            //颠倒j到l
+            while (j < l) {
+                char tmp = chars[j];
+                chars[j] = chars[l];
+                chars[l] = tmp;
+                j++;l--;
+            }
+        }
+        return String.valueOf(chars);
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P541_ReverseStringII().reverseStr("abcdefg",2)
+        );
+    }
+}
+```
 
 ## [543. Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/)
 
-### 题解-2020年1月10日
+### ⭐题解（二叉树最长路径）-2020年1月10日
+
+-   路径指的是任意两个节点之间路径的边数量
 
 ## [551. Student Attendance Record I](https://leetcode.com/problems/student-attendance-record-i/)
 
