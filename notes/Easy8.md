@@ -478,25 +478,122 @@ public class P561_ArrayPartitionI {
 
 ## [563. Binary Tree Tilt](https://leetcode.com/problems/binary-tree-tilt/)
 
-### 题解-2020年1月16日
+### 题解（二叉树-后序）-2020年1月16日
+
+```java
+public class P563_BinaryTreeTilt {
+    int sumofTilt = 0;
+    public int findTilt(TreeNode root) {
+        postOrder(root);
+        return sumofTilt;
+    }
+    private int postOrder(TreeNode root) {
+        if (root==null) {
+            return 0;
+        }
+        int sumofLeft = postOrder(root.left);
+        int sumofRight = postOrder(root.right);
+        sumofTilt += Math.abs(sumofLeft - sumofRight);
+        return sumofLeft + sumofRight + root.val;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P563_BinaryTreeTilt().findTilt(
+                        StringToTreeNode.stringToTreeNode("1,2,3,4,5,null,null,6")
+                )
+        );
+    }
+}
+```
 
 ## [566. Reshape the Matrix](https://leetcode.com/problems/reshape-the-matrix/)
 
-### 题解-2020年1月17日
+### 题解（二维数组变换）-2020年1月17日
+
+```java
+public class P566_ReshapetheMatrix {
+    public int[][] matrixReshape(int[][] nums, int r, int c) {
+        if (nums.length == 0 || (nums.length * nums[0].length != r * c)) {
+            return nums;
+        }
+        int[][] res = new int[r][c];
+        int count = 0;
+        for (int[] num : nums) {
+            for (int j = 0; j < nums[0].length; j++) {
+                res[count / c][count % c] = num[j];
+                count++;
+            }
+        }
+        return res;
+    }
+    public static void main(String[] args) {
+        int[][] res = new P566_ReshapetheMatrix().matrixReshape(new int[][]{{1, 2}, {3, 4}}, 1, 4);
+        for (int[] re : res) {
+            System.out.println(
+                    Arrays.toString(re)
+            );
+        }
+    }
+}
+```
 
 ## [572. Subtree of Another Tree](https://leetcode.com/problems/subtree-of-another-tree/)
 
-### 题解-2020年1月18日
+### ⭐题解（二叉树-子树判断）-2020年1月18日
+
+```java
+public class P572_SubtreeofAnotherTree {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (isSame(s, t)) return true;
+        if(s==null) return false;
+        return isSubtree(s.left, t) || isSubtree(s.right, t);
+    }
+    private boolean isSame(TreeNode s, TreeNode t) {
+        if (s == null && t == null)  return true;
+        if (s == null||t==null) return false;
+        if (s.val != t.val)  return false;
+        return isSame(s.left, t.left) && isSame(s.right, t.right);
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P572_SubtreeofAnotherTree().isSubtree(
+                        StringToTreeNode.stringToTreeNode("3,4,5,1,2"),
+                        StringToTreeNode.stringToTreeNode("4,1,2")
+                )
+        );
+    }
+}
+```
 
 ## [575. Distribute Candies](https://leetcode.com/problems/distribute-candies/)
 
-### 题解-2020年1月19日
+### 题解（HashSet）-2020年1月19日
+
+```java
+public class P575_DistributeCandies {
+    public int distributeCandies(int[] candies) {
+        Set<Integer> kinds = new HashSet<>();
+        for (int candy : candies) {
+            kinds.add(candy);
+        }
+        return  Math.min(kinds.size(), (candies.length / 2));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(
+                new P575_DistributeCandies().distributeCandies(new int[]{1,1,2,2,2,2})
+        );
+    }
+}
+```
 
 ## [LOCKED UP]577. Employee Bonus
 
 ## [581. Shortest Unsorted Continuous Subarray](https://leetcode.com/problems/shortest-unsorted-continuous-subarray/)
 
-### 题解-2020年1月20日
+### 题解（数列问题）-2020年1月20日
+
+![](./images/8-1.png)
 
 ## [LOCKED UP]584. Find Customer Referee
 
