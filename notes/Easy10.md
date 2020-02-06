@@ -196,15 +196,145 @@ public class P645_SetMismatch {
 
 ## [653. Two Sum IV - Input is a BST](https://leetcode.com/problems/two-sum-iv-input-is-a-bst/)
 
-### 题解（）-2020年2月7日
+### ⭐题解（BST、HashSet、BFS）-2020年2月7日
+
+```java
+public class P653_TwoSumIV_InputisaBST {
+    //1.HashSet+DFS
+    public boolean findTarget1(TreeNode root, int k) {
+        Set<Integer> nodeSet = new HashSet<>();
+        return preorderTraversal(root, nodeSet,k);
+    }
+    private boolean preorderTraversal(TreeNode root, Set<Integer> nodeSet,int k) {
+        if (root==null) return false;
+        if (nodeSet.contains(k - root.val))
+            return true;
+        nodeSet.add(root.val);
+        return preorderTraversal(root.left,nodeSet,k)|| preorderTraversal(root.right,nodeSet,k);
+    }
+    //2.HashSet+BFS
+    public boolean findTarget2(TreeNode root, int k) {
+        if (root==null) return false;
+        Set<Integer> nodeSet = new HashSet<>();
+        Queue<TreeNode> toTraversal = new LinkedList<>();
+        toTraversal.add(root);
+        while (!toTraversal.isEmpty()) {
+            TreeNode node = toTraversal.poll();
+            if (nodeSet.contains(k - node.val)) {
+                return true;
+            }
+            nodeSet.add(node.val);
+            if (node.left!=null) toTraversal.add(node.left);
+            if (node.right!=null) toTraversal.add(node.right);
+        }
+        return false;
+    }
+    //3.BST中序遍历是有序的+双指针
+    public boolean findTarget3(TreeNode root, int k) {
+        List<Integer> valArray = new ArrayList<>();
+        inorder(root, valArray);
+        int l = 0, r = valArray.size() - 1;
+        while (l < r) {
+            int sum = valArray.get(l) + valArray.get(r);
+            if (sum == k)
+                return true;
+            if (sum < k)
+                l++;
+            else
+                r--;
+        }
+        return false;
+    }
+    private void inorder(TreeNode root, List<Integer> valArray) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, valArray);
+        valArray.add(root.val);
+        inorder(root.right,valArray);
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P653_TwoSumIV_InputisaBST().findTarget1(
+                        StringToTreeNode.stringToTreeNode("5,3,6,2,4,null,7"),9
+                )
+        );
+        System.out.println(
+                new P653_TwoSumIV_InputisaBST().findTarget2(
+                        StringToTreeNode.stringToTreeNode("5,3,6,2,4,null,7"),9
+                )
+        );
+        System.out.println(
+                new P653_TwoSumIV_InputisaBST().findTarget3(
+                        StringToTreeNode.stringToTreeNode("5,3,6,2,4,null,7"),9
+                )
+        );
+    }
+}
+```
 
 ## [657. Robot Return to Origin](https://leetcode.com/problems/robot-return-to-origin/)
 
-### 题解（）-2020年2月8日
+### 题解（字符统计）-2020年2月8日
+
+```java
+public class P657_RobotReturntoOrigin {
+    public boolean judgeCircle(String moves) {
+        int x = 0;
+        int y = 0;
+        for (char ch : moves.toCharArray()) {
+            if (ch == 'U') y++;
+            else if (ch == 'D') y--;
+            else if (ch == 'R') x++;
+            else if (ch == 'L') x--;
+        }
+        return x == 0 && y == 0;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P657_RobotReturntoOrigin().judgeCircle("LLRR")
+        );
+    }
+}
+```
 
 ## [661. Image Smoother](https://leetcode.com/problems/image-smoother/)
 
-### 题解（）-2020年2月9日
+### 题解（二维数组）-2020年2月9日
+
+```java
+public class P661_ImageSmoother {
+    public int[][] imageSmoother(int[][] M) {
+        int len1 = M.length;
+        int len2 = M[0].length;
+        int[][] result = new int[len1][len2];
+        for(int i = 0;i < len1;i++) {
+            for(int j = 0;j < len2;j++) {
+                int sum = 0;
+                int count = 0;
+                for(int m = i - 1;m < i + 2;m++) {
+                    for(int n = j - 1;n < j + 2;n++) {
+                        if(m >= 0 && m < len1 && n >= 0 && n < len2) {
+                            sum += M[m][n];
+                            count++;
+                        }
+                    }
+                }
+                result[i][j] = sum / count;
+            }
+        }
+        return result;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                        Arrays.deepToString(new P661_ImageSmoother().imageSmoother(
+                                new int[][]{{1,3,2},{6,2,25}}
+                        ))
+                );
+
+    }
+}
+```
 
 ## [665. Non-decreasing Array](https://leetcode.com/problems/non-decreasing-array/)
 
