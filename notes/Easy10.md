@@ -338,15 +338,102 @@ public class P661_ImageSmoother {
 
 ## [665. Non-decreasing Array](https://leetcode.com/problems/non-decreasing-array/)
 
-### 题解（）-2020年2月10日
+### 题解（线段-贪心）-2020年2月10日
+
+```Java
+public class P665_Non_decreasingArray {
+    public boolean checkPossibility(int[] nums) {
+        int count = 0;
+        for (int i = 0; i + 1 < nums.length; i++) {
+            if (nums[i] > nums[i+1]) {
+                count++;
+                if (i>0 && nums[i+1]<nums[i-1]) nums[i + 1] = nums[i];
+                else nums[i] = nums[i+1];
+                if (count>1) return false;
+            }
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P665_Non_decreasingArray().checkPossibility(
+                        new int[]{3,4,2,3}
+                )
+        );
+    }
+}
+```
 
 ## [669. Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree/)
 
-### 题解（）-2020年2月11日
+### ⭐题解（树+递归剪枝）-2020年2月11日
+
+```java
+public class P669_TrimaBinarySearchTree {
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null) return null;
+        if (root.val<L) return trimBST(root.right,L,R);
+        if (root.val > R) return trimBST(root.left, L, R);
+        root.left = trimBST(root.left, L, R);
+        root.right = trimBST(root.right, L, R);
+        return root;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P669_TrimaBinarySearchTree().trimBST(
+                        StringToTreeNode.stringToTreeNode("2,0,3,-4,1"),-1,3
+                )
+        );
+    }
+}
+```
 
 ## [671. Second Minimum Node In a Binary Tree](https://leetcode.com/problems/second-minimum-node-in-a-binary-tree/)
 
-### 题解（）-2020年2月12日
+### ⭐题解（树，找次小值）-2020年2月12日
+
+-   最值初始化
+
+```java
+public class P671_SecondMinimumNodeInaBinaryTree {
+    public int findSecondMinimumValue(TreeNode root) {
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+        boolean isExist1 = false;
+        boolean isExist2 = false;
+        Queue<TreeNode> toTraversal = new LinkedList<>();
+        toTraversal.offer(root);
+        while (!toTraversal.isEmpty()) {
+            TreeNode node = toTraversal.poll();
+            if (node.left!=null) toTraversal.offer(node.left);
+            if (node.right!=null) toTraversal.offer(node.right);
+            if (!isExist1) {
+                min1 = node.val;
+                isExist1 = true;
+            } else if (min1 > node.val) {
+                min2 = min1;
+                min1 = node.val;
+                if (!isExist2) isExist2 = true;
+            }else if (min1<node.val){
+                if (!isExist2){
+                    min2 = node.val;
+                    isExist2 = true;
+                }else{
+                    if (min2>node.val) min2 = node.val;
+                }
+            }
+        }
+        return isExist2?min2:-1;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P671_SecondMinimumNodeInaBinaryTree().findSecondMinimumValue(
+                        StringToTreeNode.stringToTreeNode("2,2,2147483647")
+                )
+        );
+    }
+}
+```
 
 ## [674. Longest Continuous Increasing Subsequence](https://leetcode.com/problems/longest-continuous-increasing-subsequence/)
 
