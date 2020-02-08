@@ -437,15 +437,102 @@ public class P671_SecondMinimumNodeInaBinaryTree {
 
 ## [674. Longest Continuous Increasing Subsequence](https://leetcode.com/problems/longest-continuous-increasing-subsequence/)
 
-### 题解（）-2020年2月13日
+### 题解（最长增长子串）-2020年2月13日
+
+```java
+public class P674_LongestContinuousIncreasingSubsequence {
+    public int findLengthOfLCIS(int[] nums) {
+        if (nums.length<2) return nums.length;
+        int count = 1;
+        int res = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[i - 1]) {
+                count++;
+                res = Math.max(res, count);
+            }else
+                count=1;
+        }
+        return res;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P674_LongestContinuousIncreasingSubsequence().findLengthOfLCIS(
+                        new int[]{1,3,5,4,7}
+                )
+        );
+    }
+}
+```
 
 ## [680. Valid Palindrome II](https://leetcode.com/problems/valid-palindrome-ii/)
 
-### 题解（）-2020年2月14日
+### 题解（字符串）-2020年2月14日
+
+```java
+public class P680_ValidPalindromeII {
+    public boolean validPalindrome(String s) {
+        int l = 0, r = s.length()-1;
+        while (l < r) {
+            if (s.charAt(l)!=s.charAt(r))
+                return isPalindrome(s, l + 1, r) || isPalindrome(s, l, r - 1);
+            l++;
+            r--;
+        }
+        return true;
+    }
+    private boolean isPalindrome(String s, int l, int r) {
+        while (l < r) {
+            if (s.charAt(l)!=s.charAt(r)) return false;
+            l++;
+            r--;
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P680_ValidPalindromeII().validPalindrome("abccbdda")
+        );
+    }
+}
+```
 
 ## [682. Baseball Game](https://leetcode.com/problems/baseball-game/)
 
-### 题解（）-2020年2月15日
+### 题解（字符串，模拟题，Stack）-2020年2月15日
+
+```java
+public class P682_BaseballGame {
+    public int calPoints(String[] ops) {
+        Stack<Integer> pointsStack = new Stack<>();
+        for (String op : ops) {
+            if ("C".equals(op)) {
+                pointsStack.pop();
+            } else if ("D".equals(op)) {
+                pointsStack.push(pointsStack.peek() * 2);
+            } else if ("+".equals(op)) {
+                int top = pointsStack.pop();
+                int newTop = top + pointsStack.peek();
+                pointsStack.push(top);
+                pointsStack.push(newTop);
+            } else {
+                pointsStack.push(Integer.valueOf(op));
+            }
+        }
+        int ans = 0;
+        for (Integer i : pointsStack) {
+            ans+=i;
+        }
+        return ans;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P682_BaseballGame().calPoints(
+                        new String[]{"5","2","C","D","+"}
+                )
+        );
+    }
+}
+```
 
 ## [686. Repeated String Match](https://leetcode.com/problems/repeated-string-match/)
 
