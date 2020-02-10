@@ -536,15 +536,102 @@ public class P682_BaseballGame {
 
 ## [686. Repeated String Match](https://leetcode.com/problems/repeated-string-match/)
 
-### 题解（）-2020年2月16日
+### ⭐题解（字符串匹配）-2020年2月16日
+
+-   T-$O(n(m+n))$ S-$O(n)$
+
+```java
+public class P686_RepeatedStringMatch {
+    public int repeatedStringMatch(String A, String B) {
+        int q = 1;
+        StringBuilder S = new StringBuilder(A);
+        for (; S.length() < B.length(); q++) S.append(A);
+        if (S.indexOf(B) >= 0) return q;
+        if (S.append(A).indexOf(B) >= 0) return q+1;
+        return -1;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P686_RepeatedStringMatch().repeatedStringMatch(
+                        "abcd","cdabcdabcd"
+                )
+        );
+    }
+}
+```
 
 ## [687. Longest Univalue Path](https://leetcode.com/problems/longest-univalue-path/)
 
-### 题解（）-2020年2月17日
+### ⭐题解（二叉树、递归遍历）-2020年2月17日
+
+```java
+public class P687_LongestUnivaluePath {
+    int ans = 0;
+    public int longestUnivaluePath(TreeNode root) {
+        findEdgeLength(root);
+        return ans;
+    }
+    private int findEdgeLength(TreeNode root) {
+        if (root == null) return 0;
+        int left = findEdgeLength(root.left);
+        int right = findEdgeLength(root.right);
+        int arrowLeft = 0, arrowRight = 0;
+        if (root.left != null && root.left.val == root.val) {
+            arrowLeft += left + 1;
+        }
+        if (root.right != null && root.right.val == root.val) {
+            arrowRight += right + 1;
+        }
+        ans = Math.max(ans, arrowLeft + arrowRight);
+        return Math.max(arrowLeft, arrowRight);
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P687_LongestUnivaluePath().longestUnivaluePath(
+                        StringToTreeNode.stringToTreeNode("5,4,5,1,1,null,5")
+                )
+        );
+    }
+}
+```
 
 ## [690. Employee Importance](https://leetcode.com/problems/employee-importance/)
 
-### 题解（）-2020年2月18日
+### ⭐题解（HashMap，BFS，ArrayList初始化）-2020年2月18日
+
+```java
+public class P690_EmployeeImportance {
+    public int getImportance(List<Employee> employees, int id) {
+        int total = 0;
+        Map<Integer, Employee> map = new HashMap<>();
+        for (Employee employee : employees) {
+            map.put(employee.id, employee);
+        }
+        Queue<Employee> queue = new LinkedList<>();
+        queue.offer(map.get(id));
+        while (!queue.isEmpty()) {
+            Employee current = queue.poll();
+            total += current.importance;
+            for (int subordinate : current.subordinates) {
+                queue.offer(map.get(subordinate));
+            }
+        }
+        return total;
+    }
+    public static void main(String[] args) {
+        List<Employee> employees = new ArrayList<>(Arrays.asList(
+                new Employee(1,5,Arrays.asList(2,3)),
+                new Employee(2,3,new ArrayList<>()),
+                new Employee(3,3,new ArrayList<>())
+        ));
+        System.out.println(
+                new P690_EmployeeImportance().getImportance(
+                        employees,1
+                )
+        );
+    }
+}
+```
 
 ## [693. Binary Number with Alternating Bits](https://leetcode.com/problems/binary-number-with-alternating-bits/)
 
