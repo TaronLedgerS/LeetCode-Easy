@@ -635,12 +635,95 @@ public class P690_EmployeeImportance {
 
 ## [693. Binary Number with Alternating Bits](https://leetcode.com/problems/binary-number-with-alternating-bits/)
 
-### 题解（）-2020年2月19日
+### 题解（二进制）-2020年2月19日
+
+```Java
+public class P693_BinaryNumberwithAlternatingBits {
+    public boolean hasAlternatingBits(int n) {
+        String s = Integer.toBinaryString(n);
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == s.charAt(i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P693_BinaryNumberwithAlternatingBits().hasAlternatingBits(5)
+        );
+    }
+}
+```
 
 ## [696. Count Binary Substrings](https://leetcode.com/problems/count-binary-substrings/)
 
-### 题解（）-2020年2月20日
+### 题解（子串，压缩数组）-2020年2月20日
+
+```java
+public class P696_CountBinarySubstrings {
+    public int countBinarySubstrings(String s) {
+        List<Integer> group = new ArrayList<>();
+        int count = 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) == s.charAt(i - 1)) {
+                count++;
+            } else {
+                group.add(count);
+                count = 1;
+            }
+        }
+        group.add(count);
+        count = 0;
+        for (int i = 1; i < group.size(); i++) {
+            count += Math.min(group.get(i), group.get(i - 1));
+        }
+        return count;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P696_CountBinarySubstrings().countBinarySubstrings(
+                        "000110011"
+                )
+        );
+    }
+}
+```
 
 ## [697. Degree of an Array](https://leetcode.com/problems/degree-of-an-array/)
 
-### 题解（）-2020年2月21日
+### 题解（HashMap）-2020年2月21日
+
+```java
+public class P697_DegreeofanArray {
+    public int findShortestSubArray(int[] nums) {
+        HashMap<Integer, int[]> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++){
+            if (!map.containsKey(nums[i])){
+                map.put(nums[i], new int[]{1, i, i});
+            } else {
+                int[] temp = map.get(nums[i]);
+                temp[0]++;
+                temp[2] = i;
+            }
+        }
+        int degree = Integer.MIN_VALUE, res = Integer.MAX_VALUE;
+        for (int[] value : map.values()){
+            if (value[0] > degree){
+                degree = value[0];
+                res = value[2] - value[1] + 1;
+            } else if (value[0] == degree){
+                res = Math.min( value[2] - value[1] + 1, res);
+            }
+        }
+        return res;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P697_DegreeofanArray().findShortestSubArray(
+                        new int[]{1,3,2,2,3,1}
+                )
+        );
+    }
+}
+```
