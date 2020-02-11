@@ -692,7 +692,7 @@ public class P696_CountBinarySubstrings {
 
 ## [697. Degree of an Array](https://leetcode.com/problems/degree-of-an-array/)
 
-### 题解（HashMap）-2020年2月21日
+### ⭐题解（HashMap）-2020年2月21日
 
 ```java
 public class P697_DegreeofanArray {
