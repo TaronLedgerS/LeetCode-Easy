@@ -251,21 +251,128 @@ public class P720_LongestWordinDictionary {
 
 ## [724. Find Pivot Index](https://leetcode.com/problems/find-pivot-index/)
 
-### 题解（）-2020年3月1日
+### 题解（数组，前缀和）-2020年3月1日
+
+```java
+public class P724_FindPivotIndex {
+    public int pivotIndex(int[] nums) {
+        int  letfSum = 0,sum = 0;
+        for (int num:nums) sum += num;
+        for (int i = 0; i < nums.length; i++) {
+            if (letfSum == sum-letfSum-nums[i]){
+                return i;
+            }
+            letfSum += nums[i];
+        }
+        return -1;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P724_FindPivotIndex().pivotIndex(new int[]{1,7,3,6,5,6})
+        );
+    }
+}
+```
 
 ## [728. Self Dividing Numbers](https://leetcode.com/problems/self-dividing-numbers/)
 
-### 题解（）-2020年3月2日
+### 题解（枚举，自除数）-2020年3月2日
+
+```java
+public class P728_SelfDividingNumbers {
+    public List<Integer> selfDividingNumbers(int left, int right) {
+        List<Integer> ans = new ArrayList<>();
+        for (int i = left; i <= right; i++) {
+            if (isSelfDividingNumbers(i)) ans.add(i);
+        }
+        return ans;
+    }
+    private boolean isSelfDividingNumbers(int n) {
+        char[] temp  = String.valueOf(n).toCharArray();
+        for (char c : temp) {
+            if (c=='0'|| n%(c-'0')>0) return false;
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P728_SelfDividingNumbers().selfDividingNumbers(1,22).toString()
+        );
+    }
+}
+```
 
 ## [733. Flood Fill](https://leetcode.com/problems/flood-fill/)
 
-### 题解（）-2020年3月3日
+### ⭐题解（二维数组，BFS）-2020年3月3日
+
+-   小技巧
+
+```java
+public class P733_FloodFill {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        if (image[sr][sc]==newColor) return image;
+        int oldColor = image[sr][sc];
+        int[] BFS_DIR = {0,1,0,-1,0};//小技巧
+        Queue<pixel> queue = new LinkedList<>();
+        queue.offer(new pixel(sr, sc));
+        while (!queue.isEmpty()) {
+            pixel p = queue.poll();
+            image[p.rowIndex][p.colIndex] = newColor;
+            for (int i = 0; i < BFS_DIR.length-1; i++) {
+                int nextR = p.rowIndex+BFS_DIR[i];
+                int nextC = p.colIndex + BFS_DIR[i + 1];
+                if (nextR >= 0 && nextR < image.length && nextC >= 0 && nextC < image[0].length && image[nextR][nextC] == oldColor) {
+                    queue.offer(new pixel(nextR, nextC));
+                }
+            }
+        }
+        return image;
+    }
+    static class pixel{
+        int rowIndex;
+        int colIndex;
+        pixel(int r, int c) {
+            rowIndex = r;
+            colIndex = c;
+        }
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                Arrays.deepToString(new P733_FloodFill().floodFill(
+                        new int[][]{{1,1,1},{1,1,0},{1,0,1}},1,1,2
+                ))
+        );
+    }
+}
+```
 
 ## [LOCKED UP]734.	Sentence Similarity
 
 ## [744. Find Smallest Letter Greater Than Target](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
 
-### 题解（）-2020年3月4日
+### ⭐题解（二分查找）-2020年3月4日
+
+```java
+public class P744_FindSmallestLetterGreaterThanTarget {
+    public char nextGreatestLetter(char[] letters, char target) {
+        int l = 0, r = letters.length;//取大范围
+        while (l < r) {
+            int m = l + (r-l) / 2;
+            if (letters[m]<=target) l = m + 1;
+            else r = m;//不-1
+        }
+        return letters[l%letters.length];//找一个目标可插入的位置
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P744_FindSmallestLetterGreaterThanTarget().nextGreatestLetter(
+                        new char[]{'c', 'f', 'j'},'f'
+                )
+        );
+    }
+}
+```
 
 ## [746. Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/)
 
