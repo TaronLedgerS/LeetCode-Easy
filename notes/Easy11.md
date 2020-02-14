@@ -1,6 +1,6 @@
 [TOC]
 
-# LeetCode-Easy9-Top201_220
+# LeetCode-Easy11-Top201_220
 
 -   Problems-ID：700、703、704、705、706、709、 **716** 、717、720、724、728、733、 **734** 、744、746、747、748、 **751** 、 **758** 、 **760**
 
@@ -376,15 +376,101 @@ public class P744_FindSmallestLetterGreaterThanTarget {
 
 ## [746. Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/)
 
-### 题解（）-2020年3月5日
+### 题解（一维DP）-2020年3月5日
+
+```java
+public class P746_MinCostClimbingStairs {
+    public int minCostClimbingStairs(int[] cost) {
+        int[] minCostSum = new int[cost.length];
+        minCostSum[0]=cost[0];
+        minCostSum[1]=cost[1];
+        for (int i = 2; i < cost.length; i++) {
+            minCostSum[i] = Math.min(minCostSum[i - 1], minCostSum[i - 2]) + cost[i];
+        }
+        return Math.min(minCostSum[cost.length - 2], minCostSum[cost.length - 1]);
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P746_MinCostClimbingStairs().minCostClimbingStairs(new int[]{1,100,1,1,1,100,1,1,100,1})
+        );
+    }
+}
+```
 
 ## [747. Largest Number At Least Twice of Others](https://leetcode.com/problems/largest-number-at-least-twice-of-others/)
 
-### 题解（）-2020年3月6日
+### 题解（简单数组）-2020年3月6日
+
+```java
+public class P747_LargestNumberAtLeastTwiceofOthers {
+    public int dominantIndex(int[] nums) {
+        if (nums.length==1) return 0;
+        int maxFirst = Integer.MIN_VALUE;
+        int maxSecond = Integer.MIN_VALUE;
+        int maxFirstIndex = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] >= maxFirst) {
+                maxSecond = maxFirst;
+                maxFirst = nums[i];
+                maxFirstIndex = i;
+            }else if(nums[i] > maxSecond)
+                maxSecond = nums[i];
+        }
+        if (maxFirst>=maxSecond*2) return maxFirstIndex;
+        else return -1;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P747_LargestNumberAtLeastTwiceofOthers().dominantIndex(
+                        new  int[]{3, 5, 1, 0}
+                )
+        );
+    }
+}
+```
 
 ## [748. Shortest Completing Word](https://leetcode.com/problems/shortest-completing-word/)
 
-### 题解（）-2020年3月7日
+### ⭐题解（字符串，模拟题）-2020年3月7日
+
+```java
+public class P748_ShortestCompletingWord {
+    public String shortestCompletingWord(String licensePlate, String[] words) {
+        int[] charMap = new int[26];
+        for (char c : licensePlate.toLowerCase().toCharArray()) {
+            if (c>='a'&&c<='z') charMap[c-'a']++;
+        }
+        int minLen = Integer.MAX_VALUE;
+        String res = "" ;
+        for (String word : words) {
+            if (minLen > word.length()) {
+                int[] currMap = new int[26];
+                for (char c : word.toCharArray())
+                    currMap[c - 'a']++;
+                boolean match = true;
+                for (int j = 0; j < 26; j++) {
+                    if (charMap[j] != 0 && charMap[j] > currMap[j]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    res = word;
+                    minLen = word.length();
+                }
+            }
+        }
+        return res;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P748_ShortestCompletingWord().shortestCompletingWord(
+                        "1s3 PSt", new String[]{"step", "steps", "stripe", "stepple"}
+                )
+        );
+    }
+}
+```
 
 ## [LOCKED UP]751.	IP to CIDR
 
