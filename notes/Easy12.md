@@ -6,15 +6,79 @@
 
 ## [762. Prime Number of Set Bits in Binary Representation](https://leetcode.com/problems/prime-number-of-set-bits-in-binary-representation/)
 
-### 题解（）-2020年3月8日
+### 题解（素数，二进制）-2020年3月8日
+
+```java
+public class P762_PrimeNumberofSetBitsinBinaryRepresentation {
+    public int countPrimeSetBits(int L, int R) {
+        int ans =0;
+        for (int i = L; i <= R; i++) {
+            int count = Integer.bitCount(i);
+            if (count==2||count==3||count==5||count==7||count==11||count==13||count==17||count==19)
+                ans++;
+        }
+        return ans;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P762_PrimeNumberofSetBitsinBinaryRepresentation().countPrimeSetBits(2, 21)
+        );
+    }
+}
+```
 
 ## [766. Toeplitz Matrix](https://leetcode.com/problems/toeplitz-matrix/)
 
-### 题解（）-2020年3月9日
+### 题解（枚举，二维数组）-2020年3月9日
+
+```java
+public class P766_ToeplitzMatrix {
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        for (int i = 0; i < matrix.length - 1; i++)
+            for (int j = 0; j < matrix[0].length - 1; j++)
+                if(matrix[i][j]!=matrix[i+1][j+1]) return false;
+        return true;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P766_ToeplitzMatrix().isToeplitzMatrix(
+                        new int[][]{{1,2,3,4},{5,1,2,3},{9,5,1,2}}
+                )
+        );
+    }
+}
+```
 
 ## [771. Jewels and Stones](https://leetcode.com/problems/jewels-and-stones/)
 
-### 题解（）-2020年3月10日
+### 题解（字符数组）-2020年3月10日
+
+```java
+public class P771_JewelsandStones {
+    public int numJewelsInStones(String J, String S) {
+        if (J.length()==0) return 0;
+        int[] JLowerCaseChar  = new int[26];
+        int[] JUpperCaseChar = new int[26];
+        for (char c : J.toCharArray()) {
+            if (c>='a'&&c<='z') JLowerCaseChar[c - 'a']++;
+            if(c>='A'&&c<='Z') JUpperCaseChar[c - 'A']++;
+        }
+        int ans = 0;
+        for (char c : S.toCharArray()) {
+            if (c>='a'&&c<='z') ans+=JLowerCaseChar[c - 'a'];
+            if(c>='A'&&c<='Z') ans+=JUpperCaseChar[c - 'A'];
+        }
+        return ans ;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P771_JewelsandStones().numJewelsInStones(
+                        "aA","aAAbbb"
+                )
+        );
+    }
+}
+```
 
 ## [783. Minimum Distance Between BST Nodes](https://leetcode.com/problems/minimum-distance-between-bst-nodes/)
 
