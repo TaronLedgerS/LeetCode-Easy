@@ -6,5 +6,6 @@ import java.util.List;
 public class temp {
     public static void main(String[] args) {
         List<Object> list = new ArrayList<>();
+        Exception e ;
     }
 }

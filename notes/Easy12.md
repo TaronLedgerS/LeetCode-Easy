@@ -82,19 +82,142 @@ public class P771_JewelsandStones {
 
 ## [783. Minimum Distance Between BST Nodes](https://leetcode.com/problems/minimum-distance-between-bst-nodes/)
 
-### 题解（）-2020年3月11日
+### 题解（BST遍历）-2020年3月11日
+
+```java
+public class P783_MinimumDistanceBetweenBSTNodes {
+    int prev=Integer.MIN_VALUE;
+    int ans = Integer.MAX_VALUE;
+    public int minDiffInBST(TreeNode root) {
+        if (root ==null ) return -1;
+        minDiffInBST(root.left);
+        if (prev != Integer.MIN_VALUE) {
+            ans = Math.min(ans, root.val - prev);
+        }
+        prev = root.val;
+        minDiffInBST(root.right);
+        return ans;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P783_MinimumDistanceBetweenBSTNodes().minDiffInBST(
+                        StringToTreeNode.stringToTreeNode("4,2,6,1,3")
+                )
+        );
+    }
+}
+```
 
 ## [784. Letter Case Permutation](https://leetcode.com/problems/letter-case-permutation/)
 
-### 题解（）-2020年3月12日
+### ⭐题解（BFS）-2020年3月12日
+
+-   排列组合
+
+```java
+public class P784_LetterCasePermutation {
+    public List<String> letterCasePermutation(String S) {
+        Queue<String> queue = new LinkedList<>();
+        if (S==null) return new LinkedList<>(queue);
+        queue.offer(S);
+        for (int i = 0; i < S.length(); i++) {
+            if (S.charAt(i)>='0'&&S.charAt(i)<='9') continue;
+            int num = queue.size();
+            for (int j = 0; j < num; j++) {
+                String cur = queue.poll();
+                char[] ch = cur.toCharArray();
+                ch[i] = Character.toLowerCase(ch[i]);
+                queue.offer(String.valueOf(ch));
+                ch[i] = Character.toUpperCase(ch[i]);
+                queue.offer(String.valueOf(ch));
+            }
+        }
+        return new LinkedList<>(queue);
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P784_LetterCasePermutation().letterCasePermutation("a1b2")
+        );
+    }
+}
+```
 
 ## [788. Rotated Digits](https://leetcode.com/problems/rotated-digits/)
 
-### 题解（）-2020年3月13日
+### ⭐题解（DP）-2020年3月13日
+
+```java
+public class P788_RotatedDigits {
+    public int rotatedDigits(int N) {
+//        Using a int[] for dp.
+//        dp[i] = 0, invalid number
+//        dp[i] = 1, valid and same number
+//        dp[i] = 2, valid and different number
+        int[] dp = new int[N + 1];
+        int count = 0;
+        for(int i = 0; i <= N; i++){
+            if(i < 10){
+                if(i == 0 || i == 1 || i == 8) dp[i] = 1;
+                else if(i == 2 || i == 5 || i == 6 || i == 9){
+                    dp[i] = 2;
+                    count++;
+                }
+            } else {
+                int a = dp[i / 10], b = dp[i % 10];
+                if(a == 1 && b == 1) dp[i] = 1;
+                else if(a >= 1 && b >= 1){
+                    dp[i] = 2;
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P788_RotatedDigits().rotatedDigits(10)
+        );
+    }
+}
+```
 
 ## [796. Rotate String](https://leetcode.com/problems/rotate-string/)
 
-### 题解（）-2020年3月14日
+### ⭐⭐题解（KMP字符串匹配）-2020年3月14日
+
+```java
+public class P796_RotateString {
+    public boolean rotateString(String A, String B) {
+        //在A+A的子串中找匹配B
+        int N = A.length();
+        if (N!=B.length()) return false;
+        if (N==0) return true;
+
+        //初始化下标转移表
+        int[] shifts = new int[N+1];
+        Arrays.fill(shifts,1);
+        int left = -1;
+        for(int right = 0;right<N;++right){
+            while(left>=0&& (B.charAt(left)!=B.charAt(right)))
+                left -= shifts[left];
+            shifts[right+1] = right-left++;
+        }
+        //Find match of B in A+A
+        int matchLen = 0;
+        for(char c:(A+A).toCharArray()){
+            while(matchLen>=0 && B.charAt(matchLen)!=c)
+                matchLen -= shifts[matchLen];
+            if(++matchLen == N) return true;
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P796_RotateString().rotateString("abcde","bcdea")
+        );
+    }
+}
+```
 
 ## [LOCKED UP]800.	Similar RGB Color
 
