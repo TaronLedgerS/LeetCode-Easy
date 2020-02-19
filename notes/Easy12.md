@@ -223,19 +223,122 @@ public class P796_RotateString {
 
 ## [804. Unique Morse Code Words](https://leetcode.com/problems/unique-morse-code-words/)
 
-### 题解（）-2020年3月15日
+### 题解（字符串查重-HashSet）-2020年3月15日
+
+```java
+public class P804_UniqueMorseCodeWords {
+    public int uniqueMorseRepresentations(String[] words) {
+        String[] MORSE = new String[]{".-","-...","-.-.","-..",".","..-.","--.",
+                "....","..",".---","-.-",".-..","--","-.",
+                "---",".--.","--.-",".-.","...","-","..-",
+                "...-",".--","-..-","-.--","--.."};
+        Set<String> transfored = new HashSet<>();
+        for(String s :words){
+            StringBuilder sb = new StringBuilder();
+            for(char c:s.toCharArray()){
+                sb.append(MORSE[c-'a']);
+            }
+            transfored.add(sb.toString());
+        }
+        return transfored.size();
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P804_UniqueMorseCodeWords().uniqueMorseRepresentations(
+                        new String[]{"gin", "zen", "gig", "msg"}
+                )
+        );
+    }
+}
+```
 
 ## [806. Number of Lines To Write String](https://leetcode.com/problems/number-of-lines-to-write-string/)
 
-### 题解（）-2020年3月16日
+### 题解（数组元素统计）-2020年3月16日
+
+```java
+public class P806_NumberofLinesToWriteString {
+    public int[] numberOfLines(int[] widths, String S) {
+        if( S==null || S.length()==0) return new int[]{0,0};
+        int countLine = 1;
+        int lastLine = 0;
+        for(char c:S.toCharArray()){
+            lastLine += widths[c-'a'];
+            if(lastLine>100){
+                countLine++;
+                lastLine = widths[c-'a'];
+            }
+        }
+        return new int[]{countLine,lastLine};
+    }
+
+    public static void main(String[] args) {
+        System.out.println(
+                Arrays.toString(
+                new P806_NumberofLinesToWriteString().numberOfLines(
+                        new int[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10},
+                        "abcdefghijklmnopqrstuvwxyz")));
+    }
+}
+```
 
 ## [811. Subdomain Visit Count](https://leetcode.com/problems/subdomain-visit-count/)
 
-### 题解（）-2020年3月17日
+### ★题解（字符串切片、正则）-2020年3月17日
+
+```java
+public class P811_SubdomainVisitCount {
+    public List<String> subdomainVisits(String[] cpdomains) {
+        Map<String,Integer> count = new HashMap<>();
+        for(String S:cpdomains){
+            //此题\\s+、\\s、“ ”都可以
+            String[] domain = S.split("\\s+");
+            //“.”和“|”都是转义字符，必须得加"\\";
+            String[] letterPart = domain[1].split("\\.");
+            int digitPart = Integer.parseInt(domain[0]);
+            String domainPart = "";
+            for(int i = letterPart.length-1;i>=0;i--){
+                domainPart = letterPart[i]+(i<letterPart.length-1?".":"")+domainPart;
+                count.put(domainPart,count.getOrDefault(domainPart,0)+digitPart);
+            }
+        }
+        List<String> ans = new ArrayList<>();
+        for(String dom:count.keySet()){
+            ans.add(""+count.get(dom)+" " +dom);
+        }
+        return ans ;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P811_SubdomainVisitCount().subdomainVisits(
+                        new String[]{"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"}
+                )
+        );
+    }
+}
+```
 
 ## [812. Largest Triangle Area](https://leetcode.com/problems/largest-triangle-area/)
 
-### 题解（）-2020年3月18日
+### 题解（数学题）-2020年3月18日
+
+```java
+public class P812_LargestTriangleArea {
+    public double largestTriangleArea(int[][] points) {
+        int N = points.length;
+        double ans = 0;
+        for (int i = 0; i < N; ++i)
+            for (int j = i+1; j < N; ++j)
+                for (int k = j+1; k < N; ++k)
+                    ans = Math.max(ans, area(points[i], points[j], points[k]));
+        return ans;
+    }
+    public double area(int[] P, int[] Q, int[] R) {
+        return 0.5 * Math.abs(P[0]*Q[1] + Q[0]*R[1] + R[0]*P[1]
+                -P[1]*Q[0] - Q[1]*R[0] - R[1]*P[0]);
+    }
+}
+```
 
 ## [819. Most Common Word](https://leetcode.com/problems/most-common-word/)
 
