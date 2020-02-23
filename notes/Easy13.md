@@ -196,15 +196,94 @@ public class P872_Leaf_SimilarTrees {
 
 ## [874. Walking Robot Simulation](https://leetcode.com/problems/walking-robot-simulation/)
 
-### 题解（）-2020年4月3日
+### 题解（模拟题）-2020年4月3日
+
+```java
+public class P874_WalkingRobotSimulation {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[] dx = new int[]{0, 1, 0, -1};
+        int[] dy = new int[]{1, 0, -1, 0};
+        int x = 0, y = 0, di = 0;
+        // Encode obstacles (x, y) as (x+30000) * (2^16) + (y+30000)
+        Set<Long> obstacleSet = new HashSet();
+        for (int[] obstacle: obstacles) {
+            long ox = (long) obstacle[0] + 30000;
+            long oy = (long) obstacle[1] + 30000;
+            obstacleSet.add((ox << 16) + oy);
+        }
+        int ans = 0;
+        for (int cmd: commands) {
+            if (cmd == -2)  //left
+                di = (di + 3) % 4;
+            else if (cmd == -1)  //right
+                di = (di + 1) % 4;
+            else {
+                for (int k = 0; k < cmd; ++k) {
+                    int nx = x + dx[di];
+                    int ny = y + dy[di];
+                    long code = (((long) nx + 30000) << 16) + ((long) ny + 30000);
+                    if (!obstacleSet.contains(code)) {
+                        x = nx;
+                        y = ny;
+                        ans = Math.max(ans, x*x + y*y);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
+```
 
 ## [876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/)
 
-### 题解（）-2020年4月4日
+### ★题解（找链表中间节点）-2020年4月4日
+
+```java
+public class P876_MiddleoftheLinkedList {
+    public ListNode middleNode(ListNode head) {
+        if(head.next==null) return head;
+        ListNode FNode = head;
+        ListNode BNode = head;
+        while(true){
+            BNode = BNode.next;
+            FNode = FNode.next;
+            if(FNode.next==null||FNode.next.next==null)
+                return BNode;
+            FNode = FNode.next;
+        }
+    }
+}
+class ListNode {
+      int val;
+      ListNode next;
+      ListNode(int x) { val = x; }
+}
+```
 
 ## [883. Projection Area of 3D Shapes](https://leetcode.com/problems/projection-area-of-3d-shapes/)
 
-### 题解（）-2020年4月5日
+### 题解（模拟题）-2020年4月5日
+
+```java
+public class P883_ProjectionAreaof3DShapes {
+    public int projectionArea(int[][] grid) {
+        int N = grid.length;
+        int ans = 0;
+        for (int i = 0; i < N;  ++i) {
+            int bestRow = 0;  // largest of grid[i][j]
+            int bestCol = 0;  // largest of grid[j][i]
+            for (int j = 0; j < N; ++j) {
+                if (grid[i][j] > 0) ans++;  // top shadow
+                bestRow = Math.max(bestRow, grid[i][j]);
+                bestCol = Math.max(bestCol, grid[j][i]);
+            }
+            ans += bestRow + bestCol;
+        }
+        return ans;
+    }
+}
+```
 
 ## [884. Uncommon Words from Two Sentences](https://leetcode.com/problems/uncommon-words-from-two-sentences/)
 
