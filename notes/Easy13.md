@@ -287,15 +287,95 @@ public class P883_ProjectionAreaof3DShapes {
 
 ## [884. Uncommon Words from Two Sentences](https://leetcode.com/problems/uncommon-words-from-two-sentences/)
 
-### 题解（）-2020年4月6日
+### 题解（HashMap）-2020年4月6日
+
+```java
+public class P884_UncommonWordsfromTwoSentences {
+    public String[] uncommonFromSentences(String A, String B){
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String s:A.split(" "))
+            map.put(s, map.getOrDefault(s, 0) + 1);
+        for (String s:B.split(" "))
+            map.put(s, map.getOrDefault(s, 0) + 1);
+        List<String> ans = new LinkedList<>();
+        for (String s : map.keySet())
+            if (map.get(s)==1) ans.add(s);
+        return ans.toArray(new String[0]);
+    }
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(
+                new P884_UncommonWordsfromTwoSentences().uncommonFromSentences(
+                        "this apple is sweet","this apple is sour"
+                ))
+        );
+    }
+}
+```
 
 ## [888. Fair Candy Swap](https://leetcode.com/problems/fair-candy-swap/)
 
-### 题解（）-2020年4月7日
+### ★题解（HashSet+查找答案）-2020年4月7日
+
+```java
+public class P888_FairCandySwap {
+    public int[] fairCandySwap(int[] A, int[] B) {
+        int SumA = 0, SumB = 0;
+        for (int i:A) SumA += i;
+        for (int i:B) SumB += i;
+        int DELTA = (SumB - SumA) / 2;
+        Set<Integer> setB = new HashSet<>();
+        for (int i:B) setB.add(i);
+        for (int x:A)
+            if (setB.contains(x + DELTA)) {
+                return new int[]{x, x + DELTA};
+            }
+        return null;
+    }
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(
+                new P888_FairCandySwap().fairCandySwap(
+                        new int[]{1,2,5},new int[]{2,4}
+                )
+        ));
+    }
+}
+```
 
 ## [892. Surface Area of 3D Shapes](https://leetcode.com/problems/surface-area-of-3d-shapes/)
 
-### 题解（）-2020年4月8日
+### 题解（模拟题）-2020年4月8日
+
+```java
+public class P892_SurfaceAreaof3DShapes {
+    public int surfaceArea(int[][] grid) {
+        int[] dr = new int[]{0, 1, 0, -1};
+        int[] dc = new int[]{1, 0, -1, 0};
+        int N = grid.length;
+        int ans = 0;
+        for (int r = 0; r < N; ++r)
+            for (int c = 0; c < N; ++c)
+                if (grid[r][c] > 0) {
+                    ans += 2;
+                    for (int k = 0; k < 4; ++k) {
+                        int nr = r + dr[k];
+                        int nc = c + dc[k];
+                        int nv = 0;
+                        if (0 <= nr && nr < N && 0 <= nc && nc < N)
+                            nv = grid[nr][nc];
+                        ans += Math.max(grid[r][c] - nv, 0);
+                    }
+                }
+        return ans;
+    }
+    public static void main(String[] args) {
+        System.out.println(
+                new P892_SurfaceAreaof3DShapes().surfaceArea(
+                        new int[][]{{1,1,1},{1,0,1},{1,1,1}}
+                )
+        );
+    }
+}
+```
 
 ## [893. Groups of Special-Equivalent Strings](https://leetcode.com/problems/groups-of-special-equivalent-strings/)
 
