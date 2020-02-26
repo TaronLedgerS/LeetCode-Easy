@@ -518,8 +518,50 @@ public class P914_XofaKindinaDeckofCards {
 
 ## [917. Reverse Only Letters](https://leetcode.com/problems/reverse-only-letters/)
 
-### 题解（）-2020年4月15日
+### 题解（循环）-2020年4月15日
+
+```java
+public class P917_ReverseOnlyLetters {
+    public String reverseOnlyLetters(String S) {
+        char[] chars = S.toCharArray();
+        int i= 0,j=S.length()-1;
+        while(i<j){
+            while(
+                    !Character.isLetter(chars[i])&&i<j) i++;
+            while(
+                    !Character.isLetter(chars[j])&&i<j) j--;
+            if(i<j){
+                char t = chars[i];
+                chars[i] = chars[j];
+                chars[j] =t;
+                i++;j--;
+            }
+        }
+        return new String(chars);
+    }
+}
+```
 
 ## [922. Sort Array By Parity II](https://leetcode.com/problems/sort-array-by-parity-ii/)
 
-### 题解（）-2020年4月16日
+### 题解（循环）-2020年4月16日
+
+```java
+public class P922_SortArrayByParityII {
+    public int[] sortArrayByParityII(int[] A) {
+        int i=0,j=1;
+        int n= A.length;
+        while(true){
+            while(i<n&&A[i]%2==0) i+=2;
+            while(j<n&&A[j]%2==1) j+=2;
+            if(i>=n||j>=n) break;
+            int t = A[i];
+            A[i]=A[j];
+            A[j] = t;
+            i+=2;
+            j+=2;
+        }
+        return A;
+    }
+}
+```
