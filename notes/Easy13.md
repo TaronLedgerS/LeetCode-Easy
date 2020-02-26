@@ -379,27 +379,142 @@ public class P892_SurfaceAreaof3DShapes {
 
 ## [893. Groups of Special-Equivalent Strings](https://leetcode.com/problems/groups-of-special-equivalent-strings/)
 
-### 题解（）-2020年4月9日
+### 题解-2020年4月9日
+
+```java
+public class P893_GroupsofSpecial_EquivalentStrings {
+    public int numSpecialEquivGroups(String[] A) {
+        Set<String> seen = new HashSet<>();
+        for(String S:A){
+            int[] count = new int[52];
+            for(int i = 0;i<S.length();i++)
+                count[S.charAt(i)-'a'+26*(i%2)]++;
+            seen.add(Arrays.toString(count));
+        }
+        return seen.size();
+    }
+}
+```
 
 ## [896. Monotonic Array](https://leetcode.com/problems/monotonic-array)
 
-### 题解（）-2020年4月10日
+### 题解（遍历）-2020年4月10日
+
+```java
+public class P896_MonotonicArray {
+    public boolean isMonotonic(int[] A) {
+        return increasing(A)||decreasing(A);
+    }
+    public boolean increasing(int[] A){
+        for(int i = 0;i<A.length-1;i++)
+            if (A[i]>A[i+1]) return false;
+        return true;
+    }
+    public boolean decreasing(int[] A){
+        for(int i = 0;i<A.length-1;i++)
+            if (A[i]<A[i+1]) return false;
+        return true;
+    }
+}
+```
 
 ## [897. Increasing Order Search Tree](https://leetcode.com/problems/increasing-order-search-tree)
 
-### 题解（）-2020年4月11日
+### ★题解（二叉树，中序）-2020年4月11日
+
+```java
+public class P897_IncreasingOrderSearchTree {
+    public TreeNode increasingBST(TreeNode root) {
+        List<Integer> vals = new ArrayList<>();
+        Inorder(root,vals);
+
+        TreeNode Node = new TreeNode(vals.get(0));
+        TreeNode newRoot = Node;
+        for(int i = 1;i<vals.size();i++){
+            Node.right = new TreeNode(vals.get(i));
+            Node = Node.right;
+        }
+        return newRoot;
+    }
+    private void Inorder(TreeNode root, List<Integer> vals){
+        if(root==null) return;
+        Inorder(root.left,vals);
+        vals.add(root.val);
+        Inorder(root.right,vals);
+    }
+}
+```
 
 ## [905. Sort Array By Parity](https://leetcode.com/problems/sort-array-by-parity/)
 
-### 题解（）-2020年4月12日
+### 题解-2020年4月12日
+
+```java
+public class P905_SortArrayByParity {
+    public int[] sortArrayByParity(int[] A) {
+        int l = 0;
+        int r = A.length-1;
+        while(l<r){
+            while(A[l]%2==0 && l<r) l++;
+            while(A[r]%2==1 && l<r) r--;
+            if(l<r){
+                int t = A[l];
+                A[l] = A[r];
+                A[r] = t;
+            }
+        }
+        return A;
+    }
+}
+```
 
 ## [908. Smallest Range I](https://leetcode.com/problems/smallest-range-i/)
 
-### 题解（）-2020年4月13日
+### 题解（数学）-2020年4月13日
+
+```java
+public class P908_SmallestRangeI {
+    public int smallestRangeI(int[] A, int K) {
+        int min = A[0],max = A[0];
+        for(int x:A){
+            min = Math.min(min,x);
+            max = Math.max(max,x);
+        }
+        return Math.max(0,max-min-2*K);
+    }
+}
+```
 
 ## [914. X of a Kind in a Deck of Cards](https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/)
 
-### 题解（）-2020年4月14日
+### ★题解（最大公约数）-2020年4月14日
+
+```java
+public class P914_XofaKindinaDeckofCards {
+    public boolean hasGroupsSizeX(int[] deck) {
+        int[] count = new int[10001];
+        for(int a :deck)
+            count[a]++;
+
+        int gcd = -1;
+        for(int a: count){
+            if(a>0){
+                if(gcd==-1)
+                    gcd = a;
+                else
+                    gcd = getGCD(gcd,a);
+            }
+        }
+        return gcd>=2;
+    }
+    //最大公约数！！！
+    public int getGCD(int x,int y){
+        if(y==0)
+            return x;
+        return getGCD(y,x%y);
+    }
+}
+```
 
 ## [917. Reverse Only Letters](https://leetcode.com/problems/reverse-only-letters/)
 
