@@ -37,19 +37,112 @@ public class P925_LongPressedName {
 
 ## [929. Unique Email Addresses](https://leetcode.com/problems/unique-email-addresses/)
 
-### 题解（）-2020年4月18日
+### 题解（字符串）-2020年4月18日
+
+```java
+public class P929_UniqueEmailAddresses {
+    public int numUniqueEmails(String[] emails) {
+        Set<String> emailsSet = new HashSet<>();
+        for (String e : emails)
+            emailsSet.add(getEmails(e));
+        return emailsSet.size();
+    }
+    private String getEmails(String e){
+		StringBuilder sb = new StringBuilder();
+		boolean visitedAt = false;
+		boolean visitedPlus = false;
+		for(char c:e.toCharArray()){
+			if(c=='@') visitedAt = true;
+			if(!visitedAt){
+				if(visitedPlus) continue;
+				if(c=='.') continue;
+				if(c=='+') {
+					visitedPlus = true;
+					continue;
+				}
+				sb.append(c);
+			}else{
+				sb.append(c);
+			}
+		}
+		//System.out.println(sb.toString());
+		return sb.toString();
+	}
+}
+```
 
 ## [933. Number of Recent Calls](https://leetcode.com/problems/number-of-recent-calls/)
 
-### 题解（）-2020年4月19日
+### 题解（队列）-2020年4月19日
+
+```java
+class RecentCounter {
+    Queue<Integer> q;
+    public RecentCounter() {
+        q = new LinkedList<>();
+    }
+    public int ping(int t) {
+        q.offer(t);
+        while (null != q.peek() && q.peek() < t - 3000)
+            q.poll();
+        return q.size();
+    }
+}
+```
 
 ## [937. Reorder Data in Log Files](https://leetcode.com/problems/reorder-data-in-log-files/)
 
-### 题解（）-2020年4月20日
+### 题解（自定义排序）-2020年4月20日
+
+```java
+class ReorderDataInLogFiles {
+    public String[] reorderLogFiles(String[] logs) {
+        Arrays.sort(logs, (log1, log2) -> {
+            String[] split1 = log1.split(" ", 2);
+            String[] split2 = log2.split(" ", 2);
+            boolean isDigit1 = Character.isDigit(split1[1].charAt(0));
+            boolean isDigit2 = Character.isDigit(split2[1].charAt(0));
+            if (!isDigit1 && !isDigit2) {
+                int cmp = split1[1].compareTo(split2[1]);
+                if (cmp != 0) return cmp;
+                return split1[0].compareTo(split2[0]);
+            }
+            return isDigit1 ? (isDigit2 ? 0 : 1) : -1;
+        });
+        return logs;
+    }
+}
+```
 
 ## [938. Range Sum of BST](https://leetcode.com/problems/range-sum-of-bst/)
 
-### 题解（）-2020年4月21日
+### 题解（BST-范围求和）-2020年4月21日
+
+```java
+public class P938_RangeSumOfBST {
+    public static void main(String[] args) {
+        System.out.println(
+                new RangeSumOfBST().rangeSumBST(
+                        StringToTreeNode.stringToTreeNode("10,5,15,3,7,13,18,1,null,6"),6,10
+                )
+        );
+    }
+}
+
+class RangeSumOfBST {
+    int ans;
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        dfs(root,L,R);
+        return ans;
+    }
+    private void dfs(TreeNode root, int L,int R) {
+        if (null==root) return;
+        if (root.val>L) dfs(root.left, L, R);
+        if (root.val>=L && root.val<=R) ans += root.val;
+        if (root.val<R) dfs(root.right, L, R);
+    }
+}
+```
 
 ## [941. Valid Mountain Array](https://leetcode.com/problems/valid-mountain-array/)
 
