@@ -146,15 +146,71 @@ class RangeSumOfBST {
 
 ## [941. Valid Mountain Array](https://leetcode.com/problems/valid-mountain-array/)
 
-### 题解（）-2020年4月22日
+### 题解（线段题）-2020年4月22日
+
+```java
+public class P941_ValidMountainArray {
+    public boolean validMountainArray(int[] A) {
+        int N = A.length;
+        int i = 0;
+        // walk up
+        while (i+1 < N && A[i] < A[i+1])
+            i++;
+        // peak can't be first or last
+        if (i == 0 || i == N-1)
+            return false;
+        // walk down
+        while (i+1 < N && A[i] > A[i+1])
+            i++;
+        return i == N-1;
+    }
+    public static void main(String[] args) {
+        System.out.println(new P941_ValidMountainArray().validMountainArray(new int[]{0, 2, 3, 3, 5, 2, 1, 0}));
+    }
+}
+```
 
 ## [942. DI String Match](https://leetcode.com/problems/di-string-match/)
 
-### 题解（）-2020年4月23日
+### 题解（线段题）-2020年4月23日
+
+```java
+public class P942_DIStringMatch {
+    public int[] diStringMatch(String S) {
+        int N = S.length();
+        int lo = 0, hi = N;
+        int[] ans = new int[N + 1];
+        for (int i = 0; i < N; ++i) {
+            if (S.charAt(i) == 'I')
+                ans[i] = lo++;
+            else
+                ans[i] = hi--;
+        }
+        ans[N] = lo;
+        return ans;
+    }
+}
+```
 
 ## [944. Delete Columns to Make Sorted](https://leetcode.com/problems/delete-columns-to-make-sorted/)
 
-### 题解（）-2020年4月24日
+### 题解（贪心）-2020年4月24日
+
+```java
+public class P944_DeleteColumnstoMakeSorted {
+    public int minDeletionSize(String[] A) {
+        int ans = 0;
+        for (int c = 0; c < A[0].length(); ++c)
+            for (int r = 0; r < A.length - 1; ++r)
+                if (A[r].charAt(c) > A[r+1].charAt(c)) {
+                    ans++;
+                    break;
+                }
+
+        return ans;
+    }
+}
+```
 
 ## [949. Largest Time for Given Digits](https://leetcode.com/problems/largest-time-for-given-digits/)
 
