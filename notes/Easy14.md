@@ -214,15 +214,73 @@ public class P944_DeleteColumnstoMakeSorted {
 
 ## [949. Largest Time for Given Digits](https://leetcode.com/problems/largest-time-for-given-digits/)
 
-### 题解（）-2020年4月25日
+### 题解（枚举）-2020年4月25日
+
+```java
+public class P949_LargestTimeforGivenDigits {
+    public String largestTimeFromDigits(int[] A) {
+        int ans = -1;
+
+        // Choose different indices i, j, k, l as a permutation of 0, 1, 2, 3
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j) if (j != i)
+                for (int k = 0; k < 4; ++k) if (k != i && k != j) {
+                    int l = 6 - i - j - k;
+
+                    // For each permutation of A[i], read out the time and
+                    // record the largest legal time.
+                    int hours = 10 * A[i] + A[j];
+                    int mins = 10 * A[k] + A[l];
+                    if (hours < 24 && mins < 60)
+                        ans = Math.max(ans, hours * 60 + mins);
+                }
+
+        return ans >= 0 ? String.format("%02d:%02d", ans / 60, ans % 60) : "";
+    }
+}
+```
 
 ## [953. Verifying an Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/)
 
-### 题解（）-2020年4月26日
+### 题解（字符串枚举）-2020年4月26日
+
+```java
+public class P953_VerifyinganAlienDictionary {
+    public boolean isAlienSorted(String[] words, String order) {
+        int[] index = new int[26];
+        for (int i = 0; i < order.length(); i++)
+            index[order.charAt(i) - 'a'] = i;
+        for (int i = 0; i < words.length - 1; i++) {
+            int length = Math.min(words[i].length(), words[i + 1].length());
+            for (int j = 0; j < length; j++)
+                if (words[i].charAt(j) != words[i + 1].charAt(j))
+                    if (index[words[i].charAt(j) - 'a'] > index[words[i + 1].charAt(j) - 'a'])
+                        return false;
+                    else
+                        length = -1;
+            if (length != -1 && words[i].length() > words[i + 1].length())
+                return false;
+        }
+        return true;
+    }
+}
+```
 
 ## [961. N-Repeated Element in Size 2N Array](https://leetcode.com/problems/n-repeated-element-in-size-2n-array/)
 
-### 题解（）-2020年4月27日
+### 题解（数组）-2020年4月27日
+
+```java
+public class P961_NRepeatedElementinSize2NArray {
+    public int repeatedNTimes(int[] A) {
+        for (int k = 3; k >= 1; --k)
+            for (int i = 0; i < A.length - k; ++i)
+                if (A[i] == A[i+k])
+                    return A[i];
+        return -1;
+    }
+}
+```
 
 ## [965. Univalued Binary Tree](https://leetcode.com/problems/univalued-binary-tree/)
 
