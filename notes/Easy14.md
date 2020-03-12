@@ -284,15 +284,67 @@ public class P961_NRepeatedElementinSize2NArray {
 
 ## [965. Univalued Binary Tree](https://leetcode.com/problems/univalued-binary-tree/)
 
-### 题解（）-2020年4月28日
+### 题解（二叉树）-2020年4月28日
+
+```java
+public class P965_UnivaluedBinaryTree {
+    boolean univalued = true;
+    int value;
+    public boolean isUnivalTree(TreeNode root) {
+        if (null == root) return true;
+        value = root.val;
+        preorder(root);
+        return univalued;
+    }
+    private void preorder(TreeNode root) {
+        if (null == root || !univalued) return;
+        if (root.val!=value){
+            univalued = false;
+            return;
+        }
+        preorder(root.left);
+        preorder(root.right);
+    }
+}
+```
 
 ## [970. Powerful Integers](https://leetcode.com/problems/powerful-integers/)
 
-### 题解（）-2020年4月29日
+### 题解（hashset）-2020年4月29日
+
+```java
+public class P970_PowerfulIntegers {
+    public List<Integer> powerfulIntegers(int x, int y, int bound) {
+        Set<Integer> seen = new HashSet<>();
+        for (int m = 1;m<=bound;m*=x){
+            for (int n = 1; n <= bound; n *= y) {
+                if(m+n<=bound)
+                    seen.add(m + n);
+                if (y==1) break;
+
+            }
+            if (x==1) break;
+        }
+        return new ArrayList<>(seen);
+    }
+}
+```
 
 ## [976. Largest Perimeter Triangle](https://leetcode.com/problems/largest-perimeter-triangle/)
 
-### 题解（）-2020年4月30日
+### 题解（贪心）-2020年4月30日
+
+```java
+public class P976_LargestPerimeterTriangle {
+    public int largestPerimeter(int[] A) {
+        Arrays.sort(A);
+        for (int i = A.length-3;i>=0;--i)
+            if (A[i]+A[i+1]>A[i+2])
+                return A[i] + A[i + 1] + A[i + 2];
+        return 0;
+    }
+}
+```
 
 ## [977. Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/)
 
