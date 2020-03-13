@@ -373,36 +373,46 @@ class ImplementstrStr {
 
 ```Java
 class ImplementstrStr {
-	int strStrKMP(String haystack, String needle) {
+	int strStrKMP(String s, String p) {
 		//KMP algorithms
-		if(needle.equals("")) return 0;
-		if(haystack.equals("")) return 0;
-		char[] arr = needle.toCharArray();
-		int[] next = makeNext(arr);
+		if(s.equals("")) return 0;
+		if(p.equals("")) return 0;
+		int sLen = s.length();
+		int pLen = p.length();
+		char[] S =s.toCharArray();
+		char[] P = p.toCharArray();
+		int[] next = makeNext(P);
+		//开始KMP匹配
+		while(i<sLen&&j<pLen){
+			//如果j=-1，或者当前字母匹配成功，那么比较下一个
+			if (j==-1||S[i]==P[J]) {
+				i++;
+				j++;
+			}else//②如果j != -1，且当前字符匹配失败（即S[i] != P[j]），则令 i 不变，j = next[j]  
+			 	//即，回退到最长公共前后缀的下一个字符去匹配
+				j = next[j];
 
-		for(int i = 0, j = 0, end = haystack.length(); i < end;){
-			if(j == -1 || haystack.charAt(i) == arr[j]){
-				j++; i++;
-				if(j == arr.length)//匹配到了
-					return i - arr.length;
-			}
-			if(i < end && haystack.charAt(i) != arr[j]) j = next[j]; //每匹配到，回退
 		}
-		return -1;
+		if(j==pLen)//P串匹配完了
+			return i-j;//返回匹配成功的起始下标
+		else
+			return -1;
 	}
 
-	private int[] makeNext(char[] arr){
-		int len = arr.length;
-		int[] next = new int[len];
+	private int[] makeNext(char[] p){
+		int len = p.length;
+		int[] next = new int[len];//记录除去当前字符之前子串的最长公共前后缀
 		next[0] = -1;
-		for(int j = 0, k = -1; j + 1 < len;){
-			if(k == -1 || arr[j] == arr[k]){
-				j++;
+		int k = -1;
+		int j = 0;
+		while(j<len-1){
+			//p[k]表示前缀，p[j]表示后缀
+			if (k==-1||p[j]==p[k]) {//匹配上了
+				next[j+1]=k+1;
 				k++;
-				next[j] = next[k];
-			}else{
-				k = next[k];
-			}
+				j++;
+			}else//匹配失败，回去找更小的公共前缀
+				k=next[k];
 		}
 		return next;
 	}
