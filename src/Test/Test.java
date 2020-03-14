@@ -4,6 +4,7 @@ public class Test {
     public static void main(String[] args) {
         A b = new B();
         b.test();
+        System.out.println(b.hashCode());
     }
 }
 abstract class A{

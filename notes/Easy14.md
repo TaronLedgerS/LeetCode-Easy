@@ -348,24 +348,207 @@ public class P976_LargestPerimeterTriangle {
 
 ## [977. Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/)
 
-### 题解（）-2020年5月1日
+### 题解（数组）-2020年5月1日
+
+```java
+public class P977_SquaresofaSortedArray {
+    public int[] sortedSquares(int[] A) {
+        int N = A.length;
+        int j = 0;
+        while (j<N&&A[j]<0)
+            j++;
+        int i = j-1;
+        int [] ans = new int [N];
+        int t = 0;
+        while (i>=0 && j<N){
+            if (A[i]*A[i]<A[j]*A[j]){
+                ans[t++] = A[i]*A[i];
+                i--;
+            }else {
+                ans[t++] = A[j]*A[j];
+                j++;
+            }
+        }
+        while (i>=0){
+            ans[t++] =A[i]*A[i];
+            i--;
+        }
+        while (j < N) {
+            ans[t++] = A[j] * A[j];
+            j++;
+        }
+        return ans;
+    }
+}
+```
 
 ## [985. Sum of Even Numbers After Queries](https://leetcode.com/problems/sum-of-even-numbers-after-queries/)
 
-### 题解（）-2020年5月2日
+### 题解（数组）-2020年5月2日
+
+```java
+public class P985_SumofEvenNumbersAfterQueries {
+    public int[] sumEvenAfterQueries(int[] A, int[][] queries) {
+        int S = 0;
+        for (int x: A)
+            if (x % 2 == 0)
+                S += x;
+
+        int[] ans = new int[queries.length];
+
+        for (int i = 0; i < queries.length; ++i) {
+            int val = queries[i][0], index = queries[i][1];
+            if (A[index] % 2 == 0) S -= A[index];
+            A[index] += val;
+            if (A[index] % 2 == 0) S += A[index];
+            ans[i] = S;
+        }
+
+        return ans;
+    }
+}
+```
 
 ## [989. Add to Array-Form of Integer](https://leetcode.com/problems/add-to-array-form-of-integer/)
 
-### 题解（）-2020年5月3日
+### 题解（高精度加法）-2020年5月3日
+
+```java
+public class P989_AddtoArrayFormofInteger {
+    public List<Integer> addToArrayForm(int[] A, int K) {
+        List<Integer> sum = new ArrayList<>();
+        int N = A.length;
+        int cur = K;
+        int i = N;
+        while (--i >= 0 || cur > 0) {
+            if (i >= 0)
+                cur += A[i];
+            sum.add(cur % 10);
+            cur /= 10;
+        }
+        Collections.reverse(sum);
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P989_AddtoArrayFormofInteger().addToArrayForm(new int[]{2,1,5},806));
+    }
+}
+```
 
 ## [993. Cousins in Binary Tree](https://leetcode.com/problems/cousins-in-binary-tree/)
 
-### 题解（）-2020年5月4日
+### 题解（树深度，树共同直接父母，bfs）-2020年5月4日
+
+```java
+public class P993_CousinsinBinaryTree {
+    public boolean isCousins(TreeNode root, int A, int B) {
+        if (root == null) return false;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            boolean isAexist = false;
+            boolean isBexist = false;
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                if (cur.val == A) isAexist = true;
+                if (cur.val == B) isBexist = true;
+                if (cur.left != null && cur.right != null) {
+                    if (cur.left.val == A && cur.right.val == B) {
+                        return false;
+                    }
+                    if (cur.left.val == B && cur.right.val == A) {
+                        return false;
+                    }
+                }
+                if (cur.left != null) {
+                    queue.offer(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.offer(cur.right);
+                }
+            }
+            if (isAexist && isBexist)  return true;
+        }
+        return false;
+    }
+}
+```
 
 ## [994. Rotting Oranges](https://leetcode.com/problems/rotting-oranges/)
 
-### 题解（）-2020年5月5日
+### 题解（BFS）-2020年5月5日
+
+```java
+public class P994_RottingOranges {
+    final int[] next =new int[]{-1,0,1,0,-1};
+    public int orangesRotting(int[][] grid) {
+        if(grid == null || grid.length == 0) return 0;
+        int R = grid.length, C = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        int count_fresh = 0;
+        for(int i = 0 ; i < R ; i++) {
+            for(int j = 0 ; j < C ; j++) {
+                if(grid[i][j] == 2) {
+                    queue.offer(new int[]{i , j});
+                }
+                else if(grid[i][j] == 1) {
+                    count_fresh++;
+                }
+            }
+        }
+        if(count_fresh == 0) return 0;
+        int count = 0;
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+        //bfs starting from initially rotten oranges
+        while(!queue.isEmpty()) {
+            ++count;
+            int size = queue.size();
+            for(int i = 0 ; i < size ; i++) {
+                int[] point = queue.poll();
+                for(int dir[] : dirs) {
+                    int x = point[0] + dir[0];
+                    int y = point[1] + dir[1];
+                    //if x or y is out of bound
+                    //or the orange at (x , y) is already rotten
+                    //or the cell at (x , y) is empty
+                    //we do nothing
+                    if(x < 0 || y < 0 || x >= R || y >= C || grid[x][y] == 0 || grid[x][y] == 2) continue;
+                    //mark the orange at (x , y) as rotten
+                    grid[x][y] = 2;
+                    //put the new rotten orange at (x , y) in queue
+                    queue.offer(new int[]{x , y});
+                    //decrease the count of fresh oranges by 1
+                    count_fresh--;
+                }
+            }
+        }
+        return count_fresh == 0 ? count-1 : -1;
+    }
+}
+```
 
 ## [997. Find the Town Judge](https://leetcode.com/problems/find-the-town-judge/)
 
-### 题解（）-2020年5月6日
+### 题解（图，节点入度出度问题）-2020年5月6日
+
+```java
+public class P997_FindtheTownJudge {
+    public int findJudge(int N, int[][] arr) {
+        int[] trust = new int[N];
+        int[] trusted = new int[N];
+        for(int i = 0; i < arr.length; i++){
+            int a = arr[i][0];
+            int b = arr[i][1];
+            trust[a - 1]++;
+            trusted[b - 1]++;
+        }
+        for(int i = 0; i < N; i++){
+            if(trust[i] == 0 && trusted[i] == N - 1)
+                return i + 1;
+        }
+        return -1;
+    }
+}
+```
