@@ -79,15 +79,74 @@ public class P1005_MaximizeSumOfArrayAfterKNegations {
 
 ## [1009. Complement of Base 10 Integer](https://leetcode.com/problems/complement-of-base-10-integer/)
 
-### 题解-2020年5月10日
+### 题解（位运算-异或）-2020年5月10日
+
+```java
+public class P1009_ComplementOfBase10Integer {
+    public int bitwiseComplement(int N) {
+        if (N == 1) return 0;
+        if (N == 0) return 1;
+        int X = 1;
+        while (X <= N) {
+            X = X << 1;
+        }
+        return N ^ (X - 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P1009_ComplementOfBase10Integer().bitwiseComplement(7));
+    }
+}
+```
 
 ## [1010. Pairs of Songs With Total Durations Divisible by 60](https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/)
 
-### 题解-2020年5月11日
+### 题解（打表）-2020年5月11日
+
+```java
+public int numPairsDivisibleBy60(int[] time) {
+    int res = 0;
+    int[] count = new int[60];
+    for (int a : time) count[a % 60]++;
+    for (int i = 0; i <= 30; i++) {
+        if (i == 0 || i == 30) res += (count[i]) * (count[i] - 1) / 2;
+        else
+            res += count[i] * count[60 - i];
+    }
+    return res;
+}
+```
 
 ## [1013. Partition Array Into Three Parts With Equal Sum](https://leetcode.com/problems/partition-array-into-three-parts-with-equal-sum/)
 
-### 题解-2020年5月12日
+### 题解（边界）-2020年5月12日
+
+```java
+public class P1013_PartitionArrayIntoThreePartsWithEqualSum {
+    public boolean canThreePartsEqualSum(int[] A) {
+        int allSum = 0;
+        for (int a : A) allSum += a;
+        if (allSum % 3 != 0) return false;
+        int numOfPart = 0;
+        int curSum = 0;
+        allSum /= 3;
+        for (int i = 0;i<A.length;i++) {
+            curSum += A[i];
+            if (allSum == curSum) {
+                numOfPart++;
+                curSum = 0;
+            }
+        }
+        return numOfPart >= 3;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P1013_PartitionArrayIntoThreePartsWithEqualSum().canThreePartsEqualSum(
+                new int[]{1, -1, 1, -1}
+        ));
+    }
+}
+```
 
 ## [1018. Binary Prefix Divisible By 5](https://leetcode.com/problems/binary-prefix-divisible-by-5/)
 
