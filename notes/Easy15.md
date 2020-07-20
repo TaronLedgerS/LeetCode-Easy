@@ -158,15 +158,88 @@ public class P1013_PartitionArrayIntoThreePartsWithEqualSum {
 
 ## [1018. Binary Prefix Divisible By 5](https://leetcode.com/problems/binary-prefix-divisible-by-5/)
 
-### 题解-2020年5月13日
+### 题解（位运算-优先级）-2020年5月13日
+
+```java
+public class P1018_BinaryPrefixDivisibleBy5 {
+    public List<Boolean> prefixesDivBy5(int[] A) {
+        List<Boolean> res = new ArrayList<>();
+        int num = 0;
+        for (int a : A) {
+            num = ((num << 1) + a) % 5;//注意括号
+            if (num == 0) res.add(true);
+            else
+                res.add(false);
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P1018_BinaryPrefixDivisibleBy5().prefixesDivBy5(
+                new int[]{0, 1, 1}
+        ));
+    }
+}
+```
 
 ## [1021. Remove Outermost Parentheses](https://leetcode.com/problems/remove-outermost-parentheses/)
 
-### 题解-2020年5月14日
+### 题解（括号-子串）-2020年5月14日
+
+```java
+public class P1021_RemoveOutermostParenthesesv {
+    public String removeOuterParentheses(String S) {
+        StringBuilder ans = new StringBuilder();
+        int left = 0, right = 0, startIndex = 0;
+        for (int i = 0; i < S.length(); i++) {
+            if (S.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                ans.append(S.substring(startIndex + 1, i));
+                startIndex = i + 1;
+            }
+        }
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P1021_RemoveOutermostParenthesesv().removeOuterParentheses(
+                "(()())(())"
+        ));
+    }
+}
+```
 
 ## [1022. Sum of Root To Leaf Binary Numbers](https://leetcode.com/problems/sum-of-root-to-leaf-binary-numbers/)
 
 ### 题解-2020年5月15日
+
+```java
+public class P1022_SumofRootToLeafBinaryNumbers {
+    int ans = 0;
+    public int sumRootToLeaf(TreeNode root) {
+
+        if (null!=root) dfs(root, 0);
+        return ans ;
+    }
+
+    private void dfs(TreeNode root,int nums) {
+        nums = (nums << 1) + root.val;
+        if (null == root.left && null == root.right) {
+            ans += nums;
+        }
+        if (root.left != null) {
+            dfs(root.left,nums);
+        }
+        if (root.right != null) {
+            dfs(root.right, nums);
+        }
+    }
+}
+```
 
 ## [1025. Divisor Game](https://leetcode.com/problems/divisor-game/)
 
