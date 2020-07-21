@@ -245,13 +245,94 @@ public class P1022_SumofRootToLeafBinaryNumbers {
 
 ### 题解-2020年5月16日
 
+```java
+public class P1025_DivisorGame {
+    public boolean divisorGame(int N) {
+        return N%2==0;
+    }
+}
+```
+
 ## [1029. Two City Scheduling](https://leetcode.com/problems/two-city-scheduling/)
 
-### 题解-2020年5月17日
+### ⭐题解（DP、贪心）-2020年5月17日
+
+```java
+public class P1029_TwoCityScheduling {
+
+    public int twoCitySchedCost(int[][] costs) {
+
+        int N = costs.length / 2;
+        // dp[k][i][j]:前k个人中去A城有i个人与去B城有j个人的最小花费，i+j==k，i，j<N
+        int[][][] dp = new int[2*N+1][N+1][N+1];
+
+        for (int k = 1; k <= costs.length; k++) {// 第K个人
+
+            for (int i = 0; i <= k; i++) {
+                int j = k-i;
+
+                if (j > N || i > N) continue;
+                if (i==0)
+                    dp[k][0][j] = dp[k-1][0][j-1] + costs[k-1][1];//全去B城
+                else if (i==k)
+                    dp[k][i][0] = dp[k-1][i-1][0] + costs[k-1][0];//全去A城
+                else
+                    dp[k][i][j] = Math.min(
+                            dp[k - 1][i - 1][j] + costs[k - 1][0],
+                            dp[k - 1][i][j- 1] + costs[k - 1][1]);
+            }
+        }
+        return dp[2*N][N][N];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P1029_TwoCityScheduling().twoCitySchedCost(
+                new int[][]{
+                        {10, 20}, {30, 200}, {400, 50}, {30, 20}
+                }
+        ));
+    }
+}
+```
 
 ## [1030. Matrix Cells in Distance Order](https://leetcode.com/problems/matrix-cells-in-distance-order/)
 
-### 题解-2020年5月18日
+### 题解（bfs）-2020年5月18日
+
+```java
+public class P1030_MatrixCellsInDistanceOrder {
+    public int[][] allCellsDistOrder(int R, int C, int r0, int c0) {
+        int[] next = new int[]{-1, 0, 1, 0, -1};
+        boolean[][] visited = new boolean[R][C];
+        int[][] res = new int[R*C][2];
+        res[0][0] = r0;
+        res[0][1] = c0;
+        visited[r0][c0] = true;
+        int indexHead = 0;
+        int indexTail = 1;
+        while (indexTail < R * C) {
+            for (int k = 0; k < 4; k++) {
+                int i = res[indexHead][0] + next[k];
+                int j = res[indexHead][1] + next[k + 1];
+                if (i >= 0 && j >= 0 && i < R && j < C && !visited[i][j]) {
+                    res[indexTail][0] = i;
+                    res[indexTail][1] = j;
+                    indexTail++;
+                    visited[i][j] = true;
+                }
+            }
+            indexHead++;
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.deepToString(new P1030_MatrixCellsInDistanceOrder().allCellsDistOrder(
+                2,3,1,2
+        )));
+    }
+}
+```
 
 ## [1033. Moving Stones Until Consecutive](https://leetcode.com/problems/moving-stones-until-consecutive/)
 
