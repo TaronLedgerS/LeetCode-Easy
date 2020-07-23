@@ -338,9 +338,32 @@ public class P1030_MatrixCellsInDistanceOrder {
 
 ### 题解-2020年5月19日
 
+```java
+public class P1033_MovingStonesUntilConsecutive {
+    public int[] numMovesStones(int a, int b, int c) {
+        int[] m = new int[] {a, b, c};
+        Arrays.sort(m);
+        int left = m[1] - m[0] - 1;
+        int right = m[2] - m[1] - 1;
+        return new int[] {
+                //      cases:    XX___X                X___XX              X_X_X
+                Math.min((left > 0 ? 1 : 0) + (right > 0 ? 1 : 0), (left == 1 || right == 1 ? 1 : 2)),
+                left + right};   // X___________X___________X
+    }
+}
+```
+
 ## [1037. Valid Boomerang](https://leetcode.com/problems/valid-boomerang/)
 
 ### 题解-2020年5月20日
+
+```java
+public class P1037_ValidBoomerang {
+    public boolean isBoomerang(int[][] p) {
+        return (p[0][0] - p[1][0]) * (p[0][1] - p[2][1]) != (p[0][0] - p[2][0]) * (p[0][1] - p[1][1]);
+    }
+}
+```
 
 ## [1042. Flower Planting With No Adjacent](https://leetcode.com/problems/flower-planting-with-no-adjacent/)
 
@@ -350,15 +373,79 @@ public class P1030_MatrixCellsInDistanceOrder {
 
 ### 题解-2020年5月22日
 
+```java
+public class P1046_LastStoneWeight {
+    public int lastStoneWeight(int[] stones) {
+        PriorityQueue<Integer> maxheap = new PriorityQueue<>((o1, o2) -> (o2 - o1));
+
+        for (int stone : stones) {
+            maxheap.offer(stone);
+        }
+        while (maxheap.size() > 1) {
+            int y = maxheap.poll();
+            int x = maxheap.poll();
+            if (y>x) maxheap.offer(y - x);
+        }
+        if (maxheap.size()==1) return maxheap.poll();
+        else return 0;
+    }
+}
+```
+
 ## [1047. Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/)
 
 ### 题解-2020年5月23日
+
+```java
+public class P1047_RemoveAllAdjacentDuplicatesInString {
+    public String removeDuplicates(String S) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : S.toCharArray()) {
+            int size = sb.length();
+            if (size > 0 && sb.charAt(size - 1) == c) {
+                sb.deleteCharAt(size - 1);
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}
+```
 
 ## [LOCKED UP]1050.	Actors and Directors Who Cooperated At Least Three Times
 
 ## [1051. Height Checker](https://leetcode.com/problems/height-checker/)
 
 ### 题解-2020年5月24日
+
+```java
+public class P1051_HeightChecker {
+    public int heightChecker(int[] heights) {
+        int[] heightToFreq = new int[101];
+
+        for (int height : heights) {
+            heightToFreq[height]++;
+        }
+
+        int result = 0;
+        int curHeight = 0;
+
+        for (int i = 0; i < heights.length; i++) {
+            while (heightToFreq[curHeight] == 0) {
+                curHeight++;
+            }
+
+            if (curHeight != heights[i]) {
+                result++;
+            }
+            heightToFreq[curHeight]--;
+        }
+
+        return result;
+    }
+}
+```
 
 ## [LOCKED UP]1056.	Confusing Number
 
