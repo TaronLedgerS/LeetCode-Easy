@@ -204,16 +204,92 @@ order by id
 
 ### 题解-2020年6月8日
 
+```java
+public class P1184_DistanceBetweenBusStops {
+    public int distanceBetweenBusStops(int[] distance, int start, int destination) {
+        int res = Integer.MAX_VALUE;
+        int n = distance.length;
+        int i = start;
+        int dis = 0;
+        while (i != destination) {
+            dis += distance[i++];
+            i = i % n;
+        }
+        res = Math.min(res, dis);
+        dis = 0;
+        i = start;
+        while (i != destination) {
+            i = (i-1+n) % n;
+            dis += distance[i];
+        }
+        res = Math.min(res, dis);
+        return res;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new P1184_DistanceBetweenBusStops().distanceBetweenBusStops(
+                new int[]{1,2,3,4},0,3
+        ));
+    }
+}
+```
+
 ## [1185. Day of the Week](https://leetcode.com/problems/day-of-the-week/<>)
 
 ### 题解-2020年6月9日
 
+```java
+public class P1185_DayOfTheWeek {
+    public String dayOfTheWeek(int day, int month, int year) {
+        return LocalDate.of(year, month, day).getDayOfWeek().getDisplayName(TextStyle.FULL,  Locale.getDefault());
+    }
+}
+```
+
 ## [1189. Maximum Number of Balloons](https://leetcode.com/problems/maximum-number-of-balloons/)
 
 ### 题解-2020年6月10日
+
+```java
+public class P1189_MaximumNumberOfBalloons {
+    public int maxNumberOfBalloons(String text) {
+        int[] chars = new int[26]; //count all letters
+        for (char c : text.toCharArray()) {
+            chars[c - 'a']++;
+        }
+        int min = chars[1];//for b
+        min = Math.min(min, chars[0]);//for a
+        min = Math.min(min, chars[11] / 2);// for l /2
+        min = Math.min(min, chars[14] / 2);//similarly for o/2
+        min = Math.min(min, chars[13]);//for n
+        return min;
+    }
+}
+```
 
 ## [LOCKED UP]1196.	How Many Apples Can You Put into the Basket
 
 ## [1200. Minimum Absolute Difference](https://leetcode.com/problems/minimum-absolute-difference/)
 
 ### 题解-2020年6月11日
+
+```java
+public class P1200_MinimumAbsoluteDifference {
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        Arrays.sort(arr);
+        int minDist = Integer.MAX_VALUE;
+        List<List<Integer>> res = new LinkedList<>();
+        for (int i = 0; i < arr.length - 1; i++) {
+            int dist = arr[i + 1] - arr[i];
+            if (dist < minDist) {
+                minDist = dist;
+                res.clear();
+                res.add(Arrays.asList(arr[i], arr[i + 1]));
+            } else if (dist==minDist){
+                res.add(Arrays.asList(arr[i], arr[i + 1]));
+            }
+        }
+        return res;
+    }
+}
+```
