@@ -8,6 +8,28 @@
 
 ### 题解-2020年6月12日
 
+```java
+public class P1207_UniqueNumberOfOccurrences {
+    public boolean uniqueOccurrences(int[] arr) {
+        //array to store number of occurances
+        int[] c = new int[2001];
+        //count occurance of each value
+        for (int n : arr) {
+            c[n+1000]++;
+        }
+        //check unique occurances (except for 0)
+        Set<Integer> set = new HashSet();
+        for (int count : c) {
+            if (count == 0)
+                continue;
+            if (!set.add(count))
+                return false;
+        }
+        return true;
+    }
+}
+```
+
 ## [LOCKED UP]1211.	Queries Quality and Percentage
 
 ## [LOCKED UP]1213.	Intersection of Three Sorted Arrays
@@ -16,9 +38,33 @@
 
 ### 题解-2020年6月13日
 
+```java
+public class P1217_PlayWithChips {
+    public int minCostToMoveChips(int[] chips) {
+        int[] cnt = new int[2];
+        for (int chip : chips)
+            ++cnt[chip % 2];
+        return Math.min(cnt[0], cnt[1]);
+    }
+}
+```
+
 ## [1221. Split a String in Balanced Strings](https://leetcode.com/problems/split-a-string-in-balanced-strings/)
 
 ### 题解-2020年6月14日
+
+```java
+public class P1221_SplitAStringInBalancedStrings {
+    public int balancedStringSplit(String s) {
+        int res = 0, cnt = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            cnt += s.charAt(i) == 'L' ? 1 : -1;
+            if (cnt == 0) ++res;
+        }
+        return res;
+    }
+}
+```
 
 ## [LOCKED UP]1228.	Missing Number In Arithmetic Progression
 
@@ -65,3 +111,7 @@
 ## [1287. Element Appearing More Than 25% In Sorted Array](https://leetcode.com/problems/element-appearing-more-than-25-in-sorted-array/)
 
 ### 题解-2020年6月22日
+
+## [1290. Convert Binary Number in a Linked List to Integer](https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/)
+
+### 题解-2020年6月23日
