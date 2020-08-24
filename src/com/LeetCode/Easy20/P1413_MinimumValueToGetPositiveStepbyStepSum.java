@@ -8,7 +8,5 @@ public class P1413_MinimumValueToGetPositiveStepbyStepSum {
             min_sum = Math.min(min_sum, sum);
         }
         return 1 - min_sum;
-
     }
-
 }
